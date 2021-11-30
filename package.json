@@ -1,0 +1,41 @@
+{
+  "name": "cinema-app",
+  "version": "1.0.0",
+  "description": "Cinema App for WebEntwicklungen",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "clean": "rm -rf ./node_modules",
+    "lint": "semistandard",
+    "lintFix": "semistandard --fix",
+    "debug": "cp ./webapp/src/index.html ./webapp/build/index.html && lessc -clean-css ./webapp/src/styles/style.less ./webapp/build/styles/style.css && browserify ./webapp/src/js/Main.js ./node_modules/uikit/dist/js/uikit.min.js -o ./webapp/build/js/main.js",
+    "build": "npm run debug && ./node_modules/terser/bin/terser ./webapp/build/js/main.js --compress --mangle -o ./webapp/build/js/main.js",
+    "start": "node main.js 8080"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DwieDave/cinema-app.git"
+  },
+  "author": "Marius Müller & David Gruber",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/DwieDave/cinema-app/issues"
+  },
+  "homepage": "https://github.com/DwieDave/cinema-app#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "uikit": "^3.9.4"
+  },
+  "devDependencies": {
+    "browserify": "^17.0.0",
+    "less": "^4.1.2",
+    "less-plugin-clean-css": "^1.5.1",
+    "semistandard": "^16.0.1",
+    "terser": "^5.10.0"
+  },
+  "semistandard": {
+    "ignore": [
+      "/webapp/build/"
+    ]
+  }
+}
