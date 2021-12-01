@@ -1,0 +1,1 @@
+npm run debug && ./node_modules/terser/bin/terser ./webapp/build/js/main.js --compress --mangle -o ./webapp/build/js/main.js
