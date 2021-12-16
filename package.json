@@ -4,7 +4,7 @@
   "description": "Cinema App for WebEntwicklungen",
   "main": "main.js",
   "scripts": {
-    "clean": "rm -rf ./node_modules",
+    "clean": "rm -rf ./node_modules && rm -rf ./webapp/build",
     "lint": "semistandard",
     "lintFix": "semistandard --fix",
     "debug": "./debug.sh",
@@ -34,7 +34,8 @@
   },
   "semistandard": {
     "ignore": [
-      "/webapp/build/"
+      "/webapp/build/",
+      "/node_modules"
     ]
   }
 }

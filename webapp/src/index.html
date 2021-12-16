@@ -10,26 +10,56 @@
 </head>
 
 <body>
-    <ul uk-accordion>
-        <li class="uk-open">
-            <a class="uk-accordion-title" href="#">Item 1</a>
-            <div class="uk-accordion-content">
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+    <nav class="uk-navbar-container" uk-navbar>
+        <div class="uk-navbar-left">
+
+            <img id="logo" class="uk-margin-left uk-margin-right" src="img/logo.svg" alt="CinemaApp">
+
+            <ul class="uk-navbar-nav">
+                <li class="uk-active"><a href="#">Home</a></li>
+                <li>
+                    <a href="#">Programm</a>
+                    <div class="uk-navbar-dropdown">
+                        <ul class="uk-nav uk-navbar-dropdown-nav">
+                            <li><a href="#">Vorschau</a></li>
+                            <li><a href="#">Specials</a></li>
+                        </ul>
+                    </div>
+                </li>
+                <li><a href="#">Unser Kino</a></li>
+            </ul>
+
+        </div>
+        <div class="uk-navbar-right">
+            <div class="uk-margin-right">
+                <div class="uk-button-group">
+                    <button class="uk-button modeSelection customer">Kunde</button>
+                    <button class="uk-button modeSelection owner">Betreiber</button>
+                </div>
             </div>
-        </li>
-        <li>
-            <a class="uk-accordion-title" href="#">Item 2</a>
-            <div class="uk-accordion-content">
-                <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor reprehenderit.</p>
-            </div>
-        </li>
-        <li>
-            <a class="uk-accordion-title" href="#">Item 3</a>
-            <div class="uk-accordion-content">
-                <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat proident.</p>
-            </div>
-        </li>
-    </ul>
+        </div>
+    </nav>
+
+    <div id="headerImage" class="uk-container uk-padding-remove uk-container-expand">
+        <img class="uk-width-expand" src="img/felix-mooneeram-evlkOfkQ5rE-unsplash.jpg" alt="">
+    </div>
+
+    <div id="content" class="uk-container uk-margin-large-top">
+        <div id="contentOwner">
+            <h3>Betreiber</h3>
+            <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Omnis expedita natus minus doloremque tempora
+                quis deleniti minima reiciendis! Fugit ducimus odio optio. Eligendi non totam possimus, repellat cum
+                libero alias?</p>
+        </div>
+
+        <div id="contentCustomer">
+            <h3>Kunde</h3>
+            <p>Adipisicing elit. Omnis expedita natus minus doloremque tempora
+                quis deleniti minima reiciendis! Fugit ducimus odio optio. Eligendi non totam possimus, repellat cum
+                libero alias?Lorem ipsum, dolor sit amet consectetur.</p>
+        </div>
+
+    </div>
 
 
 
