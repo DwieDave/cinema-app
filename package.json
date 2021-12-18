@@ -1,41 +1,41 @@
 {
-  "name": "cinema-app",
-  "version": "1.0.0",
-  "description": "Cinema App for WebEntwicklungen",
-  "main": "main.js",
-  "scripts": {
-    "clean": "rm -rf ./node_modules && rm -rf ./webapp/build",
-    "lint": "semistandard",
-    "lintFix": "semistandard --fix",
-    "debug": "./debug.sh",
-    "build": "./build.sh",
-    "start": "node main.js 8080"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/DwieDave/cinema-app.git"
-  },
-  "author": "Marius Müller & David Gruber",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/DwieDave/cinema-app/issues"
-  },
-  "homepage": "https://github.com/DwieDave/cinema-app#readme",
-  "dependencies": {
-    "express": "^4.17.1",
-    "uikit": "^3.9.4"
-  },
-  "devDependencies": {
-    "browserify": "^17.0.0",
-    "less": "^4.1.2",
-    "less-plugin-clean-css": "^1.5.1",
-    "semistandard": "^16.0.1",
-    "terser": "^5.10.0"
-  },
-  "semistandard": {
-    "ignore": [
-      "/webapp/build/",
-      "/node_modules"
-    ]
-  }
+    "name": "cinema-app",
+    "version": "1.0.0",
+    "description": "Cinema App for WebEntwicklungen",
+    "main": "main.js",
+    "scripts": {
+        "clean": "rm -rf ./node_modules && rm -rf ./webapp/build",
+        "lint": "semistandard",
+        "lintFix": "semistandard --fix",
+        "debug": "sh ./debug.sh",
+        "build": "sh ./build.sh",
+        "start": "node main.js 8080"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/DwieDave/cinema-app.git"
+    },
+    "author": "Marius Müller & David Gruber",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/DwieDave/cinema-app/issues"
+    },
+    "homepage": "https://github.com/DwieDave/cinema-app#readme",
+    "dependencies": {
+        "express": "^4.17.1",
+        "uikit": "^3.9.4"
+    },
+    "devDependencies": {
+        "browserify": "^17.0.0",
+        "less": "^4.1.2",
+        "less-plugin-clean-css": "^1.5.1",
+        "semistandard": "^16.0.1",
+        "terser": "^5.10.0"
+    },
+    "semistandard": {
+        "ignore": [
+            "/webapp/build/",
+            "/node_modules"
+        ]
+    }
 }
