@@ -109,3 +109,5 @@ dist
 
 #webapp build folder
 webapp/build/
+
+package-lock.json
