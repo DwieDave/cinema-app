@@ -7,9 +7,9 @@
     "clean": "rm -rf ./node_modules && rm -rf ./webapp/build",
     "lint": "semistandard",
     "lintFix": "semistandard --fix",
-    "debug": "./debug.sh",
-    "build": "./build.sh",
-    "start": "node main.js 8080"
+    "debug": "sh ./buildscripts/debug.sh",
+    "build": "sh ./buildscripts/build.sh",
+    "start": "node ./server/main.js 8080"
   },
   "repository": {
     "type": "git",
