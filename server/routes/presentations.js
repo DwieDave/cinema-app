@@ -27,7 +27,7 @@ router.post('/v1/presentations', async (req, res) => {
       res.send(response);
     } catch (error) {
       console.error(error);
-      res.send('error: ', error.message);
+      res.json({ error: error.message });
     }
   } else {
     res.status(400).json({ error: 'Wrong Request parameters' });
