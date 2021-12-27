@@ -14,20 +14,17 @@
     <nav class="uk-navbar-container" uk-navbar>
         <div class="uk-navbar-left">
 
-            <img id="logo" class="uk-margin-left uk-margin-right" src="img/logo.svg" alt="CinemaApp">
+            <a data-routerLink href="/"><img id="logo" class="uk-margin-left uk-margin-right" src="img/logo.svg" alt="CinemaApp"></a>
 
-            <ul class="uk-navbar-nav">
-                <li class="uk-active"><a href="#">Home</a></li>
-                <li>
-                    <a href="#">Programm</a>
-                    <div class="uk-navbar-dropdown">
-                        <ul class="uk-nav uk-navbar-dropdown-nav">
-                            <li><a href="#">Vorschau</a></li>
-                            <li><a href="#">Specials</a></li>
-                        </ul>
-                    </div>
-                </li>
-                <li><a href="#">Unser Kino</a></li>
+            <ul id="menuOwner" class="uk-navbar-nav">
+                <li class="uk-active"><a data-routerLink href="/">Home</a></li>
+                <li><a data-routerLink href="/page/cinemas">Kinosäle</a></li>
+                <li><a data-routerLink href="/page/presentations">Vorführungen</a></li>
+            </ul>
+
+            <ul id="menuCustomer" class="uk-navbar-nav">
+                <li class="uk-active"><a data-routerLink href="/">Home</a></li>
+                <li><a data-routerLink href="/page/ticket">Ticket reservieren</a></li>
             </ul>
 
         </div>
@@ -41,12 +38,10 @@
         </div>
     </nav>
 
-    <header class="uk-container uk-padding-remove uk-container-expand">
-        <div id="headerImage"></div>
-    </header>
 
-    <main id="content" class="uk-container uk-margin-large-top">
-        <div id="contentOwner">
+
+    <main id="app" class="uk-animation-slide-top-small">
+        <!-- <div id="contentOwner">
             <h3>Betreiber</h3>
             <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Omnis expedita natus minus doloremque tempora
                 quis deleniti minima reiciendis! Fugit ducimus odio optio. Eligendi non totam possimus, repellat cum
@@ -58,8 +53,7 @@
             <p>Adipisicing elit. Omnis expedita natus minus doloremque tempora
                 quis deleniti minima reiciendis! Fugit ducimus odio optio. Eligendi non totam possimus, repellat cum
                 libero alias?Lorem ipsum, dolor sit amet consectetur.</p>
-        </div>
-
+        </div> -->
     </main>
 
 

@@ -17,13 +17,13 @@ router.get('/v1/cinemas/:id', async (req, res) => {
 });
 
 router.post('/v1/cinemas', async (req, res) => {
-  let body = req.body;
-  let keysToCheck = getSchemaPathNames(Cinema.schema, true);
+  const body = req.body;
+  const keysToCheck = getSchemaPathNames(Cinema.schema, true);
   if (body && containsKeys(body, keysToCheck)) {
     try {
       const newCinema = new Cinema({ name: body.name, seatRows: body.seatRows, seatsPerRow: body.seatsPerRow });
       await newCinema.save();
-      let response = await Cinema.findById(newCinema._id).exec();
+      const response = await Cinema.findById(newCinema._id).exec();
       res.send(response);
     } catch (error) {
       console.error(error);
@@ -34,4 +34,4 @@ router.post('/v1/cinemas', async (req, res) => {
   }
 });
 
-module.exports = router
+module.exports = router;

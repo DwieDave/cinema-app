@@ -17,13 +17,13 @@ router.get('/v1/presentations/:id', async (req, res) => {
 });
 
 router.post('/v1/presentations', async (req, res) => {
-  let body = req.body;
-  let keysToCheck = getSchemaPathNames(Presentation.schema, true);
+  const body = req.body;
+  const keysToCheck = getSchemaPathNames(Presentation.schema, true);
   if (body && containsKeys(body, keysToCheck)) {
     try {
       const newPresentation = new Presentation({ movieTitle: body.movieTitle, date: body.date, cinema: body.cinema });
       await newPresentation.save();
-      let response = await Presentation.findById(newPresentation._id).populate('cinema').exec();
+      const response = await Presentation.findById(newPresentation._id).populate('cinema').exec();
       res.send(response);
     } catch (error) {
       console.error(error);
@@ -34,4 +34,4 @@ router.post('/v1/presentations', async (req, res) => {
   }
 });
 
-module.exports = router
+module.exports = router;
