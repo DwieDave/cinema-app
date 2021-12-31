@@ -11,6 +11,8 @@
     "debug": "sh ./buildscripts/debug.sh",
     "build:lintFix": "npm run lintFix && sh ./buildscripts/build.sh",
     "build": "sh ./buildscripts/build.sh",
+    "ultimateBuild": "npm install && npm run build && npm start",
+    "ultimateReBuild": "npm run clean && npm run ultimateBuild",
     "start": "node ./server/main.js 8080"
   },
   "repository": {
