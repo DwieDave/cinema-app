@@ -14,6 +14,7 @@ router.get('/v1/presentations/:id', async (req, res) => {
     const presentation = await Presentation.findById(req.params.id).populate('cinema').exec();
     res.json(presentation);
   } else {
+    // Error Handling
     res.status(400).json({ error: 'Wrong Request parameter' });
   }
 });
@@ -34,6 +35,7 @@ router.post('/v1/presentations', async (req, res) => {
       res.json({ error: error.message });
     }
   } else {
+    // Error Handling
     res.status(400).json({ error: 'Wrong Request parameters' });
   }
 });

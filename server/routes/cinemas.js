@@ -14,6 +14,7 @@ router.get('/v1/cinemas/:id', async (req, res) => {
     const cinema = await Cinema.findById(req.params.id).exec();
     res.json(cinema);
   } else {
+    // Error Handling
     res.status(400).json({ error: 'Wrong Request parameter' });
   }
 });
@@ -34,6 +35,7 @@ router.post('/v1/cinemas', async (req, res) => {
       res.json({ error: error.message });
     }
   } else {
+    // Error Handling
     res.status(400).json({ error: 'Wrong Request parameters' });
   }
 });

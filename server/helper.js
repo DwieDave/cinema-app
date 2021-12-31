@@ -1,3 +1,4 @@
+/* containsKeys: check if a given object contains valid values for a given key-set */
 function containsKeys (obj, keys) {
   let test = true;
   if (obj && keys.length > 0) {
@@ -8,6 +9,7 @@ function containsKeys (obj, keys) {
   return test;
 }
 
+/* getSchemaPathNames: return all keys of a mongoose schema in a (filtered) string array */
 function getSchemaPathNames (schema, cleanIDandVersion) {
   const pathNames = Object.keys(schema.paths);
   if (cleanIDandVersion) {

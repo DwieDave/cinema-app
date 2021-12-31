@@ -9,6 +9,7 @@ router.get('/v1/reservations/:id', async (req, res) => {
     const presentation = await Reservation.findById(req.params.id).populate('presentation').exec();
     res.json(presentation);
   } else {
+    // Error Handling
     res.status(400).json({ error: 'Wrong Request parameter' });
   }
 });
@@ -21,7 +22,9 @@ router.post('/v1/reservations', async (req, res) => {
   if (body && containsKeys(body, keysToCheck)) {
     // Check if seats are available
     const presentation = await Presentation.findById(body.presentation).populate('cinema').exec();
+    // calculate cinemas total seats:
     const totalSeats = presentation.cinema.seatRows * presentation.cinema.seatsPerRow;
+    // sum all reservedSeats from all Reservations for the given presentation
     const reservedSeats = await Reservation.aggregate([
       {
         $group: {
@@ -31,6 +34,7 @@ router.post('/v1/reservations', async (req, res) => {
       }
     ]).exec();
 
+    // calculate freeSeats
     const freeSeats = totalSeats - (reservedSeats[0].count + body.reservedSeats);
     if (freeSeats >= 0) {
       try {
@@ -46,13 +50,16 @@ router.post('/v1/reservations', async (req, res) => {
         const response = await QRCode.toDataURL(`reservation_id:${newReservation._id}`);
         res.json({ qrcode: response });
       } catch (error) {
+        // Error Handling
         console.error(error);
         res.json({ error: error.message });
       }
     } else {
+      // Error Handling
       res.status(410).json({ error: 'reservedSeats amount not available' });
     }
   } else {
+    // Error Handling
     res.status(400).json({ error: 'Wrong Request parameters' });
   }
 });
