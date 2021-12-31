@@ -5,7 +5,7 @@ export default class AbstractPage {
     this.params = params;
   }
 
-  render () { return ''; }
+  async render () { return ''; }
 
   clickHandler () { return null; }
 

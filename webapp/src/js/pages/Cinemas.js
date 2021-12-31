@@ -6,7 +6,7 @@ export default class CinemasView extends AbstractPage {
     this.mode = window.localStorage.getItem('mode');
   }
 
-  render () {
+  async render () {
     document.title = 'Cinema-App: Kinosäle';
     return `<div class="uk-container uk-margin-large-top">
                   <h2> Kinosäle </h2>

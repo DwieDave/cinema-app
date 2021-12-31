@@ -6,7 +6,7 @@ export default class HomeView extends AbstractPage {
     this.mode = window.localStorage.getItem('mode');
   }
 
-  render () {
+  async render () {
     document.title = 'Cinema-App: Home';
     const template =
       `<header class="uk-container uk-padding-remove uk-container-expand">

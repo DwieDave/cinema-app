@@ -4,9 +4,15 @@ export default class PresentationsView extends AbstractPage {
   constructor () {
     super();
     this.mode = window.localStorage.getItem('mode');
+    this.clickHandler = [{
+      querySelector: '#click-me-button',
+      callback: (event) => {
+        this.sampleFunction(event);
+      }
+    }];
   }
 
-  render () {
+  async render () {
     document.title = 'Cinema-App: Home';
     const template =
       `<div class="uk-container uk-margin-large-top">
@@ -18,7 +24,7 @@ export default class PresentationsView extends AbstractPage {
                   <legend class="uk-legend">Legend</legend>
       
                   <div class="uk-margin">
-                      <input class="uk-input" type="text" placeholder="Input">
+                      <input class="uk-input" type="text" name="name" placeholder="Input">
                   </div>
       
                   <div class="uk-margin">
@@ -53,14 +59,5 @@ export default class PresentationsView extends AbstractPage {
 
   sampleFunction (ev) {
     console.log('sampleFUNCTION', this.getValue('#formInput'));
-  }
-
-  clickHandler () {
-    return [{
-      querySelector: '#click-me-button',
-      callback: (event) => {
-        this.sampleFunction(event);
-      }
-    }];
   }
 }

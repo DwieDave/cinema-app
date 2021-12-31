@@ -9,6 +9,7 @@
     "lintFix": "semistandard --fix",
     "debug:lintFix": "npm run lintFix && npm run debug",
     "debug": "sh ./buildscripts/debug.sh",
+    "build:lintFix": "npm run lintFix && sh ./buildscripts/build.sh",
     "build": "sh ./buildscripts/build.sh",
     "start": "node ./server/main.js 8080"
   },

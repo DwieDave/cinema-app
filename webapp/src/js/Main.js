@@ -4,7 +4,7 @@ import HomeView from './pages/Home';
 import PresentationsView from './pages/Presentations';
 import TicketView from './pages/Ticket';
 
-function pageRouter () {
+async function pageRouter () {
   const pages = [
     { path: '/', viewClass: HomeView },
     { path: '/page/ticket', viewClass: TicketView },
@@ -14,15 +14,15 @@ function pageRouter () {
   const page = findPage(pages);
 
   // Render Page
-  renderPage(page);
+  await renderPage(page);
 }
 
-function renderPage (routerPage) {
+async function renderPage (routerPage) {
   const PageClass = (routerPage.viewClass);
   const page = new PageClass();
-  document.querySelector('#app').innerHTML = page.render();
+  document.querySelector('#app').innerHTML = await page.render();
 
-  const clickHandlers = page.clickHandler();
+  const clickHandlers = page.clickHandler;
   if (clickHandlers?.length > 0) {
     for (const clickHandler of clickHandlers) {
       page.registerClickHandler(clickHandler.querySelector, clickHandler.callback);
