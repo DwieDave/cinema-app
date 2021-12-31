@@ -6,16 +6,17 @@ const TicketPage = require('./pages/Ticket');
 /*  Router: Handles Routes and Pages  */
 module.exports = class Router {
   constructor () {
-    this.initialize();
-  }
-
-  async initialize () {
     this.pages = [
       { path: '/', viewClass: HomePage },
       { path: '/page/ticket', viewClass: TicketPage },
       { path: '/page/cinemas', viewClass: CinemasPage },
       { path: '/page/presentations', viewClass: PresentationsPage }
     ];
+
+    this.initialize();
+  }
+
+  async initialize () {
     this.page = this.findPage(window.location.pathname);
     if (this.page) await this.renderPage(this.page);
     // TODO: else: render Error Page
