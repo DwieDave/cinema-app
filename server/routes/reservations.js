@@ -29,7 +29,7 @@ router.post('/v1/reservations', async (req, res) => {
     ]).exec();
 
     const freeSeats = totalSeats - (reservedSeats[0].count + body.reservedSeats);
-    if (freeSeats > 0) {
+    if (freeSeats >= 0) {
       try {
         // Create Reservation
         const newReservation = new Reservation({
