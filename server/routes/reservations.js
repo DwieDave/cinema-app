@@ -3,6 +3,7 @@ const { containsKeys, getSchemaPathNames } = require('../helper');
 const { Reservation, Presentation } = require('../models');
 const QRCode = require('qrcode');
 
+/* GET single reservation based on id */
 router.get('/v1/reservations/:id', async (req, res) => {
   if (req.params?.id) {
     const presentation = await Reservation.findById(req.params.id).populate('presentation').exec();
