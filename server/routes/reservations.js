@@ -12,6 +12,7 @@ router.get('/v1/reservations/:id', async (req, res) => {
   }
 });
 
+/* POST create new reservation */
 router.post('/v1/reservations', async (req, res) => {
   const body = req.body;
   const keysToCheck = getSchemaPathNames(Reservation.schema, true);

@@ -2,11 +2,13 @@ const router = require('express').Router();
 const { containsKeys, getSchemaPathNames } = require('../helper');
 const { Presentation } = require('../models');
 
+/* GET all presentations */
 router.get('/v1/presentations', async (req, res) => {
   const presentations = await Presentation.find().populate('cinema').exec();
   res.json(presentations);
 });
 
+/* GET single presentation */
 router.get('/v1/presentations/:id', async (req, res) => {
   if (req.params?.id) {
     const presentation = await Presentation.findById(req.params.id).populate('cinema').exec();
@@ -16,6 +18,7 @@ router.get('/v1/presentations/:id', async (req, res) => {
   }
 });
 
+/* POST create a new presentation */
 router.post('/v1/presentations', async (req, res) => {
   const body = req.body;
   const keysToCheck = getSchemaPathNames(Presentation.schema, true);

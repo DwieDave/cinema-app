@@ -2,11 +2,13 @@ const router = require('express').Router();
 const { containsKeys, getSchemaPathNames } = require('../helper');
 const { Cinema } = require('../models');
 
+/* GET all cinemas */
 router.get('/v1/cinemas', async (req, res) => {
   const cinemas = await Cinema.find().exec();
   res.json(cinemas);
 });
 
+/* GET single cinema */
 router.get('/v1/cinemas/:id', async (req, res) => {
   if (req.params?.id) {
     const cinema = await Cinema.findById(req.params.id).exec();
@@ -16,6 +18,7 @@ router.get('/v1/cinemas/:id', async (req, res) => {
   }
 });
 
+/* POST create a new cinema */
 router.post('/v1/cinemas', async (req, res) => {
   const body = req.body;
   const keysToCheck = getSchemaPathNames(Cinema.schema, true);
