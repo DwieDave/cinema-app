@@ -67,20 +67,6 @@ async function pageRouter () {
     removes/adds ui-kits active class to the menu-entry linking to the current page */
 
 async function renderPage (routerPage) {
-  // creating class
-  const PageClass = (routerPage.viewClass);
-  const page = new PageClass();
-  // rendering HTML content into #app container
-  document.querySelector('#app').innerHTML = await page.render();
-
-  // registering pages clickHandlers - if given
-  const clickHandlers = page.clickHandler;
-  if (clickHandlers?.length > 0) {
-    for (const clickHandler of clickHandlers) {
-      page.registerClickHandler(clickHandler.querySelector, clickHandler.callback);
-    }
-  }
-
   // setting 'uk-active' class if current path is linked in the menu-item
   const mode = window.localStorage.getItem('mode');
   const menu = document.querySelector('#menu' + mode[0].toUpperCase() + mode.slice(1));
@@ -90,6 +76,35 @@ async function renderPage (routerPage) {
     child.classList.remove('uk-active');
     if (child.children[0].attributes.href.value === routerPage.path) child.classList.add('uk-active');
   }
+
+  // creating class
+  const PageClass = (routerPage.viewClass);
+  const page = new PageClass();
+
+  // rendering HTML content into #app container
+  const appContainer = document.querySelector('#app');
+  if (appContainer) {
+    appContainer.innerHTML = '';
+    appContainer.innerHTML = await page.render();
+    // Workaround to re-trigger uikit animation on pageRender
+    appContainer.style.animation = 'none';
+    helperCalcOffsetHeight(appContainer);
+    appContainer.style.animation = null;
+  }
+
+  // registering pages clickHandlers - if given
+  const clickHandlers = page.clickHandler;
+  if (clickHandlers?.length > 0) {
+    for (const clickHandler of clickHandlers) {
+      page.registerClickHandler(clickHandler.querySelector, clickHandler.callback);
+    }
+  }
+}
+
+/*  helperCalcOffsetHeight: helper function to retrigger element calculation for uikit-animation */
+
+function helperCalcOffsetHeight (element) {
+  return element.offsetHeight;
 }
 
 /*  navigateTo: change window url without navigating to it
