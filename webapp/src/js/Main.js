@@ -1,4 +1,5 @@
 
+// TODO: Change to commonJS Modules (require & module.exports)
 import CinemasView from './pages/Cinemas';
 import HomeView from './pages/Home';
 import PresentationsView from './pages/Presentations';

@@ -1,3 +1,4 @@
+// TODO: Change to commonJS Modules (require & module.exports
 import Handlebars from 'handlebars/dist/handlebars';
 
 /*  AbstractPage: Parent-Class for all pages.
