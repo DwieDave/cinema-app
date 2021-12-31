@@ -33,7 +33,6 @@ module.exports = class AbstractPage {
   }
 
   // ----------------------------------------------
-  // TODOS:
 
   /*  TODO: getFormValues (querySelector):
       Gets all "input", "textarea", "select", etc. - elements within a form (fetched by the querySelector)
