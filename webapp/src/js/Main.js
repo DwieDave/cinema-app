@@ -1,9 +1,8 @@
 
-// TODO: Change to commonJS Modules (require & module.exports)
-import CinemasView from './pages/Cinemas';
-import HomeView from './pages/Home';
-import PresentationsView from './pages/Presentations';
-import TicketView from './pages/Ticket';
+const CinemasPage = require('./pages/Cinemas');
+const HomePage = require('./pages/Home');
+const PresentationsPage = require('./pages/Presentations');
+const TicketPage = require('./pages/Ticket');
 
 // ----------------------------------------------
 
@@ -51,10 +50,10 @@ window.addEventListener('DOMContentLoaded', function () {
 
 async function pageRouter () {
   const pages = [
-    { path: '/', viewClass: HomeView },
-    { path: '/page/ticket', viewClass: TicketView },
-    { path: '/page/cinemas', viewClass: CinemasView },
-    { path: '/page/presentations', viewClass: PresentationsView }
+    { path: '/', viewClass: HomePage },
+    { path: '/page/ticket', viewClass: TicketPage },
+    { path: '/page/cinemas', viewClass: CinemasPage },
+    { path: '/page/presentations', viewClass: PresentationsPage }
   ];
   const page = findPage(pages);
 

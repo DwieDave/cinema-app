@@ -1,7 +1,6 @@
-// TODO: Change to commonJS Modules (require & module.exports
-import AbstractPage from './AbstractPage';
+const AbstractPage = require('./AbstractPage');
 
-export default class HomeView extends AbstractPage {
+module.exports = class HomePage extends AbstractPage {
   constructor () {
     super();
     this.mode = window.localStorage.getItem('mode');
@@ -22,4 +21,4 @@ export default class HomeView extends AbstractPage {
       </div>`;
     return this.renderHandleBars(template, { greeting: this.mode === 'customer' ? 'Kunde' : 'Betreiber' });
   }
-}
+};

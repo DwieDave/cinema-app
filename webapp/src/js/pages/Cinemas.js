@@ -1,7 +1,6 @@
-// TODO: Change to commonJS Modules (require & module.exports
-import AbstractPage from './AbstractPage';
+const AbstractPage = require('./AbstractPage');
 
-export default class CinemasView extends AbstractPage {
+module.exports = class CinemasPage extends AbstractPage {
   constructor () {
     super();
     this.mode = window.localStorage.getItem('mode');
@@ -18,4 +17,4 @@ export default class CinemasView extends AbstractPage {
               <h2> Kinosäle </h2>
             </div>`;
   }
-}
+};

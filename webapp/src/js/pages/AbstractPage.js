@@ -1,9 +1,8 @@
-// TODO: Change to commonJS Modules (require & module.exports
-import Handlebars from 'handlebars/dist/handlebars';
+const Handlebars = require('handlebars');
 
 /*  AbstractPage: Parent-Class for all pages.
     Defines function names and offers common functions */
-export default class AbstractPage {
+module.exports = class AbstractPage {
   constructor (params) {
     this.params = params;
   }
@@ -47,4 +46,4 @@ export default class AbstractPage {
 
   /*  TODO: async postData (urlpath, data):
       wrap axios post call and return it to await it in the render function */
-}
+};
