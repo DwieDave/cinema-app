@@ -36,7 +36,8 @@ export default class AbstractPage {
   // TODOS:
 
   /*  TODO: getFormValues (querySelector):
-      Gets all "inputs", "textarea", "select", etc. - elements values in an object like { name: element.value }
+      Gets all "input", "textarea", "select", etc. - elements within a form (fetched by the querySelector) 
+      and returns their values in an object like: { name: element.value }
       where name (the key) is represented by the elements name attribute */
 
   /*  TODO: async getData (urlpath):
