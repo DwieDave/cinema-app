@@ -4,6 +4,7 @@ export default class PresentationsView extends AbstractPage {
   constructor () {
     super();
     this.mode = window.localStorage.getItem('mode');
+    // register clickhandler for demo Button with big arrow function to reference this correctly
     this.clickHandler = [{
       querySelector: '#click-me-button',
       callback: (event) => {
@@ -12,8 +13,18 @@ export default class PresentationsView extends AbstractPage {
     }];
   }
 
+  sampleFunction (ev) {
+    console.log('sampleFUNCTION', this.getValue('#formInput'));
+  }
+
   async render () {
     document.title = 'Cinema-App: Home';
+
+    // TODO: GetData via AbstractPage
+    // TODO: Template for a paginated presentation display
+    // TODO: Template for a new presentation form with send Button
+    // TODO: sendData via AbstractPage, display inserted presentations in paginated list
+
     const template =
       `<div class="uk-container uk-margin-large-top">
           <h2> Vorführungen </h2>
@@ -55,9 +66,5 @@ export default class PresentationsView extends AbstractPage {
           </form>
       </div>`;
     return this.renderHandleBars(template, {});
-  }
-
-  sampleFunction (ev) {
-    console.log('sampleFUNCTION', this.getValue('#formInput'));
   }
 }

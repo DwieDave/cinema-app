@@ -8,6 +8,9 @@ export default class HomeView extends AbstractPage {
 
   async render () {
     document.title = 'Cinema-App: Home';
+
+    // TODO: Template for a better looking Home page
+
     const template =
       `<header class="uk-container uk-padding-remove uk-container-expand">
           <div id="headerImage"></div>
