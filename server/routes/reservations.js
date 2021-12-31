@@ -20,7 +20,8 @@ router.post('/v1/reservations', async (req, res) => {
   // Check that all keys from Reservation.schema exists in body
   const keysToCheck = getSchemaPathNames(Reservation.schema, true);
   if (body && containsKeys(body, keysToCheck)) {
-    // Check if seats are available
+    // Check if seats are available:
+    // Get Presentation based on id provided in body
     const presentation = await Presentation.findById(body.presentation).populate('cinema').exec();
     // calculate cinemas total seats:
     const totalSeats = presentation.cinema.seatRows * presentation.cinema.seatsPerRow;
