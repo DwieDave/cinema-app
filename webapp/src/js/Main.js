@@ -86,9 +86,12 @@ async function renderPage (routerPage) {
   if (appContainer) {
     appContainer.innerHTML = '';
     appContainer.innerHTML = await page.render();
+    
     // Workaround to re-trigger uikit animation on pageRender
     appContainer.style.animation = 'none';
-    helperCalcOffsetHeight(appContainer);
+    appContainer.offsetHeight = ((element) => {
+      return element.offsetHeight;
+    })(appContainer);
     appContainer.style.animation = null;
   }
 
@@ -99,12 +102,6 @@ async function renderPage (routerPage) {
       page.registerClickHandler(clickHandler.querySelector, clickHandler.callback);
     }
   }
-}
-
-/*  helperCalcOffsetHeight: helper function to retrigger element calculation for uikit-animation */
-
-function helperCalcOffsetHeight (element) {
-  return element.offsetHeight;
 }
 
 /*  navigateTo: change window url without navigating to it
