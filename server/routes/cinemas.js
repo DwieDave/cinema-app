@@ -21,6 +21,7 @@ router.get('/v1/cinemas/:id', async (req, res) => {
 /* POST create a new cinema */
 router.post('/v1/cinemas', async (req, res) => {
   const body = req.body;
+  // Check that all keys from Cinema.schema exists in body
   const keysToCheck = getSchemaPathNames(Cinema.schema, true);
   if (body && containsKeys(body, keysToCheck)) {
     try {

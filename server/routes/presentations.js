@@ -21,6 +21,7 @@ router.get('/v1/presentations/:id', async (req, res) => {
 /* POST create a new presentation */
 router.post('/v1/presentations', async (req, res) => {
   const body = req.body;
+  // Check that all keys from Presentation.schema exists in body
   const keysToCheck = getSchemaPathNames(Presentation.schema, true);
   if (body && containsKeys(body, keysToCheck)) {
     try {

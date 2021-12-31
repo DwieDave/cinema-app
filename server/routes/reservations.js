@@ -15,6 +15,7 @@ router.get('/v1/reservations/:id', async (req, res) => {
 /* POST create new reservation */
 router.post('/v1/reservations', async (req, res) => {
   const body = req.body;
+  // Check that all keys from Reservation.schema exists in body
   const keysToCheck = getSchemaPathNames(Reservation.schema, true);
   if (body && containsKeys(body, keysToCheck)) {
     // Check if seats are available
