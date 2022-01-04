@@ -1,4 +1,5 @@
 const CinemasPage = require('./pages/Cinemas');
+const ErrorPage = require('./pages/ErrorPage');
 const HomePage = require('./pages/Home');
 const PresentationsPage = require('./pages/Presentations');
 const TicketPage = require('./pages/Ticket');
@@ -23,6 +24,10 @@ module.exports = class Router {
       const PageClass = (page.viewClass);
       this.page = new PageClass();
       await this.renderPage(page);
+    } else {
+      this.page = new ErrorPage(404, 'Seite nicht gefunden.');
+      await this.renderPage({ path: '/error', viewClass: ErrorPage });
+      this.changeURL('/error');
     }
     // TODO: else: render Error Page
   }
@@ -77,11 +82,16 @@ module.exports = class Router {
     }
   }
 
-  /*  navigateTo: change window url without navigating to it
-        call pageRouter function to render content based on the new url */
+  /*  navigateTo: "soft navigate" to url
+        call createPage function to render content based on the new url */
 
   navigateTo (url) {
-    window.history.pushState(null, null, url);
+    this.changeURL(url);
     this.createPage();
+  }
+
+  /*  changeURL: change window url without navigating to it */
+  changeURL (url) {
+    window.history.pushState(null, null, url);
   }
 };
