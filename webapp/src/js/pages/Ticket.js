@@ -39,6 +39,7 @@ module.exports = class TicketPage extends AbstractPage {
 
     console.log(this.activePresentation);
 
+    // TODO: Paginate Presentations
     // TODO: Template for a new Ticket form with send Button
     // TODO: sendData via AbstractPage, display printable QR-code
 
@@ -49,7 +50,8 @@ module.exports = class TicketPage extends AbstractPage {
                             <div class="uk-child-width-expand@s uk-text-center uk-grid-match" uk-grid>
                             {{#each presentations}}
                               <div class="uk-width-1-3@m">
-                                  <div data-presentationid="{{this._id}}" class="uk-card uk-card-default uk-card-body presentationCard{{#if (eq this._id ../activePresentation)}} uk-card-primary{{/if}}">
+                                  <div data-presentationid="{{this._id}}" 
+                                    class="uk-card uk-card-default uk-card-body presentationCard{{#if (eq this._id ../activePresentation)}} uk-card-primary{{/if}}">
                                     <ul class="uk-list">
                                       <li><strong>Film:</strong><br>{{this.movieTitle}}</li>
                                       <li><strong>Datum:</strong><br>{{this.date}}</li>

@@ -30,7 +30,6 @@ module.exports = class Router {
       await this.renderPage({ path: '/error', viewClass: ErrorPage });
       this.changeURL('/error');
     }
-    // TODO: else: render Error Page
   }
 
   /* findPage: finds page from router Pages array that matches the current location pathname */
