@@ -5,13 +5,6 @@ const port = process.argv[2];
 const path = require('path');
 const mongoose = require('mongoose');
 
-/* Connecting to MongoDB */
-async function connectDB () {
-  await mongoose.connect('mongodb://localhost:27017/cinema-app');
-}
-connectDB().catch(err => console.log(err));
-// TODO: catch exit node.js program if connection fails;
-
 /* Express: use BodyParser */
 app.use(bodyParser.json());
 
@@ -31,7 +24,18 @@ app.use(require('./routes/cinemas'));
 app.use(require('./routes/presentations'));
 app.use(require('./routes/reservations'));
 
-/* Start server on port given via argument */
-app.listen(parseInt(port), () => {
-  console.log(`Cinema-App Server running at port: ${port}`);
-});
+/* Connect to MongoDB & Start Server */
+async function startServer () {
+  try {
+    await mongoose.connect('mongodb://localhost:27017/cinema-app');
+
+    /* Start server on port given via argument */
+    app.listen(parseInt(port), () => {
+      console.log(`Cinema-App Server running at port: ${port}`);
+    });
+  } catch (error) {
+    console.error('Failed to connect to MongoDB:', error.message);
+  }
+}
+
+startServer();

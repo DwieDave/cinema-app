@@ -1,9 +1,11 @@
 const Handlebars = require('handlebars');
+const axios = require('axios');
 
 /*  AbstractPage: Parent-Class for all pages.
     Defines function names and offers common functions */
 module.exports = class AbstractPage {
   constructor (params) {
+    this.apiURL = 'http://localhost:8080/v1';
     this.params = params;
   }
 
@@ -34,15 +36,51 @@ module.exports = class AbstractPage {
 
   // ----------------------------------------------
 
-  /*  TODO: getFormValues (querySelector):
+  /*  getFormValues (querySelector):
       Gets all "input", "textarea", "select", etc. - elements within a form (fetched by the querySelector)
       and returns their values in an object like: { name: element.value }
       where name (the key) is represented by the elements name attribute */
 
-  /*  TODO: async getData (urlpath):
-      import axios
-      wrap axios get call and return it to await it in the render function */
+  getFormValues (querySelector) {
+    const selector = `${querySelector} input, ${querySelector} select, ${querySelector} textarea`;
+    const elements = document.querySelectorAll(selector);
+    const result = {};
+    for (const element of elements) {
+      if (element.name && this.isValid(element.value)) result[element.name] = element.value;
+    }
+    return result;
+  }
 
-  /*  TODO: async postData (urlpath, data):
-      wrap axios post call and return it to await it in the render function */
+  /*  async getData (urlpath):
+      import axios
+      wrap axios get call and return it to await it in the render function
+      call: getData('/cinemas') */
+  async getData (urlpath) {
+    try {
+      const response = await axios.get(this.apiURL + urlpath);
+      return response?.data || null;
+    } catch (error) {
+      console.error(error);
+      return { error: error };
+    }
+  }
+
+  /*  async postData (urlpath, data):
+      wrap axios post call and return it to await it in the render function
+      call: postData('/cinemas', {name: "Kinosaal XY", seatRows: 10, seatsPerRow: 12});
+      */
+
+  async postData (urlpath, data) {
+    try {
+      const response = await axios.post(this.apiURL + urlpath, data);
+      return response;
+    } catch (error) {
+      console.error(error);
+      return { error: error };
+    }
+  }
+
+  isValid (value) {
+    return value !== undefined && value !== null;
+  }
 };
