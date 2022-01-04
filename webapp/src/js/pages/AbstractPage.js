@@ -97,7 +97,19 @@ module.exports = class AbstractPage {
     }
   }
 
+  /* HELPER FUNCTIONS */
+
   isValid (value) {
     return value !== undefined && value !== null;
+  }
+
+  isFilled (value) {
+    return this.isValid(value) && value !== '';
+  }
+
+  formatDate (dateString) {
+    const date = new Date(dateString);
+    const options = { year: 'numeric', month: '2-digit', day: 'numeric', hour: '2-digit', minute: '2-digit' };
+    return date.toLocaleDateString('de-DE', options);
   }
 };
