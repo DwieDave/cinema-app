@@ -7,6 +7,21 @@ module.exports = class AbstractPage {
   constructor (params) {
     this.apiURL = 'http://localhost:8080/v1';
     this.params = params;
+
+    Handlebars.registerHelper({
+      eq: (v1, v2) => v1 === v2,
+      ne: (v1, v2) => v1 !== v2,
+      lt: (v1, v2) => v1 < v2,
+      gt: (v1, v2) => v1 > v2,
+      lte: (v1, v2) => v1 <= v2,
+      gte: (v1, v2) => v1 >= v2,
+      and () {
+        return Array.prototype.every.call(arguments, Boolean);
+      },
+      or () {
+        return Array.prototype.slice.call(arguments, 0, -1).some(Boolean);
+      }
+    });
   }
 
   // render: should return pages rendered HTML as String
@@ -15,11 +30,13 @@ module.exports = class AbstractPage {
 
   // registerClickHandler: finds element based on querySelector and adds a callback on click to it
   registerClickHandler (querySelector, callback) {
-    const element = document.querySelector(querySelector);
-    if (element) {
-      element.addEventListener('click', function (event) {
-        callback(event);
-      });
+    const elements = document.querySelectorAll(querySelector);
+    for (const element of elements) {
+      if (element) {
+        element.addEventListener('click', function (event) {
+          callback(event);
+        }, true);
+      }
     }
   }
 
