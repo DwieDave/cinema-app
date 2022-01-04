@@ -20,4 +20,15 @@ function getSchemaPathNames (schema, cleanIDandVersion) {
   return pathNames;
 }
 
-module.exports = { containsKeys, getSchemaPathNames };
+/* containsAnyString: tests if any of the given string array is matched in the given test string */
+function containsAnyString (string, stringsToCheck) {
+  for (let i = 0; i < stringsToCheck.length; i++) {
+    const stringToCheck = stringsToCheck[i];
+    if (string.indexOf(stringToCheck) !== -1) {
+      return true;
+    }
+  }
+  return false;
+}
+
+module.exports = { containsKeys, getSchemaPathNames, containsAnyString };
