@@ -83,4 +83,8 @@ module.exports = class AbstractPage {
   isValid (value) {
     return value !== undefined && value !== null;
   }
+
+  isValidString (value) {
+    return value !== undefined && value !== null && value !== '';
+  }
 };
