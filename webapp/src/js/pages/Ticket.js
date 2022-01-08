@@ -6,8 +6,10 @@ module.exports = class TicketPage extends AbstractPage {
 
     this.mode = window.localStorage.getItem('mode');
 
+    // Get injected Router reference
     if (options?.Router) this.router = options.Router;
 
+    // Fill ClickHandler Array
     this.clickHandler = [{
       querySelector: '.presentationCard',
       callback: (event) => {
@@ -29,13 +31,18 @@ module.exports = class TicketPage extends AbstractPage {
   }
 
   selectPresentation (event) {
+    // If presentationid exists on target set activePresentation
     if (event?.currentTarget?.dataset?.presentationid) this.activePresentation = event.currentTarget.dataset.presentationid;
+    // Save form in class attribute
     this.form = this.getFormValues('#newTicketForm');
+    // Re-Render Page without animation
     this.router.renderPage({ animation: false });
   }
 
   async sendTicket (event) {
+    // Get form values
     const sendData = this.getFormValues('#newTicketForm');
+    // Add active Presentation to formvalues
     sendData.presentation = this.activePresentation;
 
     // Test if all necessary keys are filled

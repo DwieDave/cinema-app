@@ -74,7 +74,7 @@ module.exports = class Router {
         appContainer.style.animation = null;
       }
 
-      // registering pages clickHandlers - if given
+      // registering pages clickHandlers - if given via clickHandler attribute
       const clickHandlers = this.page.clickHandler;
       if (clickHandlers?.length > 0) {
         for (const clickHandler of clickHandlers) {
