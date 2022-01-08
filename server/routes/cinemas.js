@@ -4,14 +4,14 @@ const { Cinema } = require('../models');
 
 /* GET all cinemas */
 router.get('/v1/cinemas', async (req, res) => {
-  const cinemas = await Cinema.find().exec();
+  const cinemas = await Cinema.find().select('-__v').exec();
   res.json(cinemas);
 });
 
 /* GET single cinema */
 router.get('/v1/cinemas/:id', async (req, res) => {
   if (req.params?.id) {
-    const cinema = await Cinema.findById(req.params.id).exec();
+    const cinema = await Cinema.findById(req.params.id).select('-__v').exec();
     res.json(cinema);
   } else {
     // Error Handling
@@ -28,7 +28,7 @@ router.post('/v1/cinemas', async (req, res) => {
     try {
       const newCinema = new Cinema({ name: body.name, seatRows: body.seatRows, seatsPerRow: body.seatsPerRow });
       await newCinema.save();
-      const response = await Cinema.findById(newCinema._id).exec();
+      const response = await Cinema.findById(newCinema._id).select('-__v').exec();
       res.send(response);
     } catch (error) {
       console.error(error);
