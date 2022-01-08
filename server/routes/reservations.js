@@ -1,6 +1,6 @@
 const router = require('express').Router();
-const { containsKeys, getSchemaPathNames } = require('../helper');
-const { Reservation, Presentation } = require('../models');
+const { containsKeys, getSchemaPathNames, calculateFreeSeats } = require('../helper');
+const { Reservation } = require('../models');
 const QRCode = require('qrcode');
 
 /* GET single reservation based on id */
@@ -21,23 +21,10 @@ router.post('/v1/reservations', async (req, res) => {
   const keysToCheck = getSchemaPathNames(Reservation.schema, true);
   if (body && containsKeys(body, keysToCheck)) {
     // Check if seats are available:
-    // Get Presentation based on id provided in body
-    const presentation = await Presentation.findById(body.presentation).populate('cinema').exec();
-    // calculate cinemas total seats:
-    const totalSeats = presentation.cinema.seatRows * presentation.cinema.seatsPerRow;
-    // sum all reservedSeats from all Reservations for the given presentation
-    const reservedSeats = await Reservation.aggregate([
-      {
-        $group: {
-          _id: { presentation: body.presentation },
-          count: { $sum: '$reservedSeats' }
-        }
-      }
-    ]).exec();
-
     // calculate freeSeats
-    const freeSeats = totalSeats - (reservedSeats[0].count + body.reservedSeats);
-    if (freeSeats >= 0) {
+    const freeSeatsIncludingReservation = await calculateFreeSeats(body.presentation) - body.reservedSeats;
+
+    if (freeSeatsIncludingReservation >= 0) {
       try {
         // Create Reservation
         const newReservation = new Reservation({
@@ -47,9 +34,17 @@ router.post('/v1/reservations', async (req, res) => {
         });
         await newReservation.save();
 
+        // Get newly inserted Reservation with populated presentation and cinema
+        const reservation = await Reservation.findById(newReservation._id).select('-__v').populate({
+          path: 'presentation',
+          select: '-__v',
+          populate: { path: 'cinema', select: '-__v' }
+        }).exec();
+
         // Create QR-Code and respond with it
         const response = await QRCode.toDataURL(`reservation_id:${newReservation._id}`);
-        res.json({ qrcode: response });
+
+        res.json({ qrcode: response, reservation: reservation });
       } catch (error) {
         // Error Handling
         console.error(error);
