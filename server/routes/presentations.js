@@ -1,17 +1,23 @@
 const router = require('express').Router();
-const { containsKeys, getSchemaPathNames } = require('../helper');
+const { containsKeys, getSchemaPathNames, calculateFreeSeats, clone } = require('../helper');
 const { Presentation } = require('../models');
 
 /* GET all presentations */
 router.get('/v1/presentations', async (req, res) => {
-  const presentations = await Presentation.find().populate('cinema').exec();
+  // Get presentations with populated cinema & Clone presentations to allow modification
+  const presentations = clone(await Presentation.find().select('-__v').populate('cinema', '-__v').exec());
+
+  await Promise.all(presentations.map(async presentation => {
+    presentation.freeSeats = await calculateFreeSeats(presentation._id);
+  }));
+
   res.json(presentations);
 });
 
 /* GET single presentation */
 router.get('/v1/presentations/:id', async (req, res) => {
   if (req.params?.id) {
-    const presentation = await Presentation.findById(req.params.id).populate('cinema').exec();
+    const presentation = await Presentation.findById(req.params.id).select('-__v').populate('cinema', '-__v').exec();
     res.json(presentation);
   } else {
     // Error Handling
@@ -28,7 +34,7 @@ router.post('/v1/presentations', async (req, res) => {
     try {
       const newPresentation = new Presentation({ movieTitle: body.movieTitle, date: body.date, cinema: body.cinema });
       await newPresentation.save();
-      const response = await Presentation.findById(newPresentation._id).populate('cinema').exec();
+      const response = await Presentation.findById(newPresentation._id).select('-__v').populate('cinema', '-__v').exec();
       res.send(response);
     } catch (error) {
       console.error(error);
