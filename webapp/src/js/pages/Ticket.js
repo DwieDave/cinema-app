@@ -106,7 +106,7 @@ module.exports = class TicketPage extends AbstractPage {
       `<div id="TicketPage">
         <div class="uk-container uk-margin-medium-top">
             <h2 class="uk-margin-remove-bottom"> Freie Tickets Reservieren </h2>
-            <h4 class="uk-margin-remove-top"> Vorführung auswählen </h4>
+            <h4 class="uk-margin-remove-top"> 1. Vorführung auswählen </h4>
 
             <!-- Vorführungs GRID -->
             <div class="uk-child-width-expand@s uk-text-center uk-grid-match" uk-grid>
@@ -127,7 +127,7 @@ module.exports = class TicketPage extends AbstractPage {
 
             <!-- Reservierungs FORM -->
             {{#if activePresentation}}
-            <h4> Daten eingeben und reservieren </h4>
+            <h4> 2. Daten eingeben und reservieren </h4>
             <form class="uk-form-stacked" id="newTicketForm">
                 <div class="uk-grid-match uk-margin" uk-grid>
                     <div class="uk-width-expand@m">
