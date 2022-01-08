@@ -9,6 +9,7 @@ module.exports = class AbstractPage {
     this.apiURL = 'http://localhost:8080/v1';
     this.params = params;
 
+    // Helpers for example for comparing two arrows or chaining expressions
     Handlebars.registerHelper({
       eq: (v1, v2) => v1 === v2,
       ne: (v1, v2) => v1 !== v2,
@@ -93,6 +94,10 @@ module.exports = class AbstractPage {
     return true;
   }
 
+  /*
+   * Axios Functions
+   */
+
   /*  async getData (urlpath):
       import axios
       wrap axios get call and return it to await it in the render function
@@ -122,7 +127,9 @@ module.exports = class AbstractPage {
     }
   }
 
-  /* UIKit Functions */
+  /* 
+   * UIKit Functions 
+   */
 
   toast (message, status) {
     UIkit.notification(message, status || 'primary');
@@ -134,22 +141,28 @@ module.exports = class AbstractPage {
     if (modal) modal.show();
   }
 
-  /* HELPER FUNCTIONS */
+  /* 
+   * HELPER FUNCTIONS 
+   */
 
+  /* isValid: checks if a value is not undefined or null */
   isValid (value) {
     return value !== undefined && value !== null;
   }
 
+  /* isFilled: checks if a value is valid and not empty */
   isFilled (value) {
     return this.isValid(value) && value !== '';
   }
 
+  /* formatDate: formats a datestring into german date time format */
   formatDate (dateString) {
     const date = new Date(dateString);
     const options = { year: 'numeric', month: '2-digit', day: 'numeric', hour: '2-digit', minute: '2-digit' };
     return date.toLocaleDateString('de-DE', options);
   }
 
+  /* clone: clones JSON compatible structures */
   clone (value) {
     if (value.length === undefined && typeof value === 'object') return Object.create(value);
     if (value.length !== undefined && typeof value[0] === 'object') {

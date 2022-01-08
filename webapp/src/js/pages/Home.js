@@ -13,7 +13,7 @@ module.exports = class HomePage extends AbstractPage {
 
     const template =
       `<header class="uk-container uk-padding-remove uk-container-expand">
-          <div id="headerImage"></div>
+          <div id="headerImage" {{#if (eq greeting "Betreiber")}}style="background-image: url('/img/kalle-saarinen-o3kWCB9hSBA-unsplash.jpg')"{{/if}}></div>
       </header>
       <div class="uk-container uk-margin-large-top">
           <h2> Home </h2>
