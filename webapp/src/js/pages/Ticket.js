@@ -7,6 +7,7 @@ module.exports = class TicketPage extends AbstractPage {
     // Pagination
     this.elementsPerPage = 6;
     this.currentPage = 1;
+    this.minElements = 3;
 
     this.mode = window.localStorage.getItem('mode');
 
@@ -38,13 +39,35 @@ module.exports = class TicketPage extends AbstractPage {
         event.preventDefault();
       }
     }];
+
+    this.eventListener = [{
+      element: window,
+      event: 'resize',
+      callback: (event) => {
+        this.calculateElementsPerPage();
+      }
+    }];
+  }
+
+  calculateElementsPerPage () {
+    const cardHeight = 272;
+    const height = window.innerHeight;
+    const heightForGrid = height - 520;
+    const newAmount = Math.floor(heightForGrid / cardHeight) * 3;
+    this.elementsPerPage = newAmount >= this.minElements ? newAmount : this.minElements;
+    this.saveForm();
+    this.router.renderPage({ animation: false });
+  }
+
+  saveForm () {
+    this.form = this.getFormValues('#newTicketForm');
   }
 
   selectPresentation (event) {
     // If presentationid exists on target set activePresentation
     if (event?.currentTarget?.dataset?.presentationid) this.activePresentation = event.currentTarget.dataset.presentationid;
     // Save form in class attribute
-    this.form = this.getFormValues('#newTicketForm');
+    this.saveForm();
     // Re-Render Page without animation
     this.router.renderPage({ animation: false });
   }
@@ -56,7 +79,7 @@ module.exports = class TicketPage extends AbstractPage {
     } else if (event.currentTarget.classList.value.indexOf('previousPage') !== -1) {
       if (this.currentPage - 1 > 0) this.currentPage--;
     }
-    this.form = this.getFormValues('#newTicketForm');
+    this.saveForm();
     this.router.renderPage({ animation: false });
   }
 
@@ -128,15 +151,12 @@ module.exports = class TicketPage extends AbstractPage {
       });
     }
 
-    const start = ((this.currentPage - 1) * (this.elementsPerPage)) + this.currentPage !== 1 ? 1 : 0;
+    // Calculate start and end of displayed array slice 
+    const start = ((this.currentPage - 1) * (this.elementsPerPage));
     const end = (this.currentPage * this.elementsPerPage < this.presentations.length) ? (this.currentPage * this.elementsPerPage) : (this.presentations.length - 1);
-    // console.log(start, end);
-
     const displayedPresentations = this.presentations.slice(start, end);
     const lastPage = Math.ceil(this.presentations.length / this.elementsPerPage);
     this.pages = Array.from(Array(lastPage).keys(), (_, i) => i + 1);
-
-    // TODO: Paginate Presentations
 
     const template =
       `<div id="TicketPage">
@@ -160,9 +180,10 @@ module.exports = class TicketPage extends AbstractPage {
                 </div>
                 {{/each}}
             </div>
+
+            <!-- Pagination -->
             <ul class="uk-pagination" uk-margin style="justify-content:center">
               <li><a href="javascript:void(0)" class="previousPage"><span uk-pagination-previous></span></a></li>
-
               {{#each pages}}
                 <li {{#if (eq this ../currentPage)}}class="uk-active"{{/if}}>
                   {{#if (eq this ../currentPage)}}
@@ -174,7 +195,6 @@ module.exports = class TicketPage extends AbstractPage {
               {{/each}}
               <li><a href="javascript:void(0)" class="nextPage"><span uk-pagination-next></span></a></li>
             </ul>
-
 
             <!-- Reservierungs FORM -->
             {{#if activePresentation}}
