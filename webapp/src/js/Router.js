@@ -1,4 +1,5 @@
 const CinemasPage = require('./pages/Cinemas');
+const ErrorPage = require('./pages/ErrorPage');
 const HomePage = require('./pages/Home');
 const PresentationsPage = require('./pages/Presentations');
 const TicketPage = require('./pages/Ticket');
@@ -21,10 +22,14 @@ module.exports = class Router {
     if (page) {
       // creating class
       const PageClass = (page.viewClass);
-      this.page = new PageClass();
+      this.page = new PageClass({ Router: this });
+      this.routerpage = page;
       await this.renderPage(page);
+    } else {
+      this.page = new ErrorPage(404, 'Seite nicht gefunden.');
+      await this.renderPage({ path: '/error', viewClass: ErrorPage });
+      this.changeURL('/error');
     }
-    // TODO: else: render Error Page
   }
 
   /* findPage: finds page from router Pages array that matches the current location pathname */
@@ -43,7 +48,7 @@ module.exports = class Router {
         Renders HTML content of class and registers clickHandlers of the class if given
         removes/adds ui-kits active class to the menu-entry linking to the current page */
 
-  async renderPage (routerPage) {
+  async renderPage (options) {
     // setting 'uk-active' class if current path is linked in the menu-item
     const mode = window.localStorage.getItem('mode');
     const menu = document.querySelector('#menu' + mode[0].toUpperCase() + mode.slice(1));
@@ -51,7 +56,7 @@ module.exports = class Router {
     for (let i = 0; i < menu.children.length; i++) {
       const child = menu.children[i];
       child.classList.remove('uk-active');
-      if (child.children[0].attributes.href.value === routerPage.path) child.classList.add('uk-active');
+      if (child.children[0].attributes.href.value === this.routerpage.path) child.classList.add('uk-active');
     }
 
     // rendering HTML content into #app container
@@ -61,13 +66,15 @@ module.exports = class Router {
       appContainer.innerHTML = await this.page.render();
 
       // Workaround to re-trigger uikit animation on pageRender
-      appContainer.style.animation = 'none';
-      ((element) => {
-        return element.offsetHeight;
-      })(appContainer);
-      appContainer.style.animation = null;
+      if (options?.animation !== false) {
+        appContainer.style.animation = 'none';
+        ((element) => {
+          return element.offsetHeight;
+        })(appContainer);
+        appContainer.style.animation = null;
+      }
 
-      // registering pages clickHandlers - if given
+      // registering pages clickHandlers - if given via clickHandler attribute
       const clickHandlers = this.page.clickHandler;
       if (clickHandlers?.length > 0) {
         for (const clickHandler of clickHandlers) {
@@ -77,11 +84,16 @@ module.exports = class Router {
     }
   }
 
-  /*  navigateTo: change window url without navigating to it
-        call pageRouter function to render content based on the new url */
+  /*  navigateTo: "soft navigate" to url
+        call createPage function to render content based on the new url */
 
   navigateTo (url) {
-    window.history.pushState(null, null, url);
+    this.changeURL(url);
     this.createPage();
+  }
+
+  /*  changeURL: change window url without navigating to it */
+  changeURL (url) {
+    window.history.pushState(null, null, url);
   }
 };

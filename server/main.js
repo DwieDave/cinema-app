@@ -4,13 +4,16 @@ const bodyParser = require('body-parser');
 const port = process.argv[2];
 const path = require('path');
 const mongoose = require('mongoose');
+const { containsAnyString } = require('./helper');
 
 /* Express: use BodyParser */
 app.use(bodyParser.json());
 
 /* Simple Middleware to redirect SinglePageApplication pages to index with redirect url-parameter */
 app.use(function (req, res, next) {
-  if (req.url.indexOf('/page/') !== -1) {
+  const passThroughPaths = ['/styles/', '/img/', '/js/', '?redirect=', '/v1/'];
+  if (req.url !== '/' && !containsAnyString(req.url, passThroughPaths)) {
+    console.log(req.url);
     const URIpath = encodeURIComponent(req.url);
     res.redirect('/?redirect=' + URIpath);
   } else next();
