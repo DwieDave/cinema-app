@@ -184,7 +184,7 @@ module.exports = class TicketPage extends AbstractPage {
               </div>
             {{/if}}
         </div>
-    </div>`;
+      </div>`;
 
     const data = {
       presentations: this.presentations,

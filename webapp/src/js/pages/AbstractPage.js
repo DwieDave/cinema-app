@@ -127,8 +127,8 @@ module.exports = class AbstractPage {
     }
   }
 
-  /* 
-   * UIKit Functions 
+  /*
+   * UIKit Functions
    */
 
   toast (message, status) {
@@ -141,8 +141,8 @@ module.exports = class AbstractPage {
     if (modal) modal.show();
   }
 
-  /* 
-   * HELPER FUNCTIONS 
+  /*
+   * HELPER FUNCTIONS
    */
 
   /* isValid: checks if a value is not undefined or null */
