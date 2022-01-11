@@ -23,10 +23,6 @@ module.exports = class PresentationsPage extends AbstractPage {
     }];
   }
 
-  sampleFunction (ev) {
-    console.log(this.getFormValues('#demoForm'));
-    // console.log('PresentationPage', );
-  }
 
   async render () {
     document.title = 'Cinema-App: Home';
