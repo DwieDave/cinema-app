@@ -4,6 +4,10 @@ module.exports = class TicketPage extends AbstractPage {
   constructor (options) {
     super();
 
+    // Pagination
+    this.elementsPerPage = 6;
+    this.currentPage = 1;
+
     this.mode = window.localStorage.getItem('mode');
 
     // Get injected Router reference
@@ -27,6 +31,12 @@ module.exports = class TicketPage extends AbstractPage {
         this.printReservation();
         event.preventDefault();
       }
+    }, {
+      querySelector: '.changeToPage, .nextPage, .previousPage',
+      callback: (event) => {
+        this.changeToPage(event);
+        event.preventDefault();
+      }
     }];
   }
 
@@ -36,6 +46,17 @@ module.exports = class TicketPage extends AbstractPage {
     // Save form in class attribute
     this.form = this.getFormValues('#newTicketForm');
     // Re-Render Page without animation
+    this.router.renderPage({ animation: false });
+  }
+
+  changeToPage (event) {
+    if (event?.currentTarget?.dataset?.page) this.currentPage = parseInt(event.currentTarget.dataset.page);
+    else if (event.currentTarget.classList.value.indexOf('nextPage') !== -1) {
+      if (this.currentPage + 1 <= this.pages[this.pages.length - 1]) this.currentPage++;
+    } else if (event.currentTarget.classList.value.indexOf('previousPage') !== -1) {
+      if (this.currentPage - 1 > 0) this.currentPage--;
+    }
+    this.form = this.getFormValues('#newTicketForm');
     this.router.renderPage({ animation: false });
   }
 
@@ -107,6 +128,14 @@ module.exports = class TicketPage extends AbstractPage {
       });
     }
 
+    const start = ((this.currentPage - 1) * (this.elementsPerPage)) + this.currentPage !== 1 ? 1 : 0;
+    const end = (this.currentPage * this.elementsPerPage < this.presentations.length) ? (this.currentPage * this.elementsPerPage) : (this.presentations.length - 1);
+    // console.log(start, end);
+
+    const displayedPresentations = this.presentations.slice(start, end);
+    const lastPage = Math.ceil(this.presentations.length / this.elementsPerPage);
+    this.pages = Array.from(Array(lastPage).keys(), (_, i) => i + 1);
+
     // TODO: Paginate Presentations
 
     const template =
@@ -121,8 +150,8 @@ module.exports = class TicketPage extends AbstractPage {
                 <div class="uk-width-1-3@m">
                     <div data-presentationid="{{this._id}}"
                         class="uk-card uk-card-default uk-card-body presentationCard{{#if (eq this._id ../activePresentation)}} uk-card-primary{{/if}}">
+                        <h4>{{this.movieTitle}}</h4>
                         <ul class="uk-list">
-                            <li><strong>Film:</strong><br>{{this.movieTitle}}</li>
                             <li><strong>Datum:</strong><br>{{this.date}}</li>
                             <li><strong>Kinosaal:</strong><br>{{this.cinema.name}}</li>
                             <li><strong>Freie Plätze:</strong><br>{{this.freeSeats}}</li>
@@ -131,9 +160,25 @@ module.exports = class TicketPage extends AbstractPage {
                 </div>
                 {{/each}}
             </div>
+            <ul class="uk-pagination" uk-margin style="justify-content:center">
+              <li><a href="javascript:void(0)" class="previousPage"><span uk-pagination-previous></span></a></li>
+
+              {{#each pages}}
+                <li {{#if (eq this ../currentPage)}}class="uk-active"{{/if}}>
+                  {{#if (eq this ../currentPage)}}
+                    <span>{{this}}</span>
+                  {{else}} 
+                    <a href="javascript:void(0)" data-page="{{this}}" class="changeToPage">{{this}}</a>
+                  {{/if}}
+                </li>
+              {{/each}}
+              <li><a href="javascript:void(0)" class="nextPage"><span uk-pagination-next></span></a></li>
+            </ul>
+
 
             <!-- Reservierungs FORM -->
             {{#if activePresentation}}
+            <hr class="uk-margin-medium-top">
             <h4> 2. Daten eingeben und reservieren </h4>
             <form class="uk-form-stacked" id="newTicketForm">
                 <div class="uk-grid-match uk-margin" uk-grid>
@@ -187,10 +232,12 @@ module.exports = class TicketPage extends AbstractPage {
       </div>`;
 
     const data = {
-      presentations: this.presentations,
+      presentations: displayedPresentations,
       activePresentation: this.activePresentation,
       form: this.form,
-      response: this.response
+      response: this.response,
+      currentPage: this.currentPage,
+      pages: this.pages
     };
     return this.renderHandleBars(template, data);
   }

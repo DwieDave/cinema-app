@@ -12,7 +12,7 @@ module.exports = class PresentationsPage extends AbstractPage {
       querySelector: '#presentations-btn-submit',
       callback: async (event) => {
         const formValues = this.getFormValues('#presentations-form-createPresentation');
-        if (this.isValidString(formValues['presentations-input-title']) && this.isValidString(formValues['presentations-input-date']) && this.isValidString(formValues['presentations-select-cinema'])) {
+        if (this.isFilled(formValues['presentations-input-title']) && this.isFilled(formValues['presentations-input-date']) && this.isFilled(formValues['presentations-select-cinema'])) {
           const response = await this.postData('/presentations', { movieTitle: formValues['presentations-input-title'], date: formValues['presentations-input-date'], cinema: mongoose.Types.ObjectId(formValues['presentations-select-cinema']) });
           window.location.reload();
           console.log(response);
@@ -22,7 +22,6 @@ module.exports = class PresentationsPage extends AbstractPage {
       }
     }];
   }
-
 
   async render () {
     document.title = 'Cinema-App: Home';
