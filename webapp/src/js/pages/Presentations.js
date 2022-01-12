@@ -1,28 +1,31 @@
 const AbstractPage = require('./AbstractPage');
-const mongoose = require('mongoose');
 
 module.exports = class PresentationsPage extends AbstractPage {
   constructor (options) {
     super();
     this.mode = window.localStorage.getItem('mode');
+    this.formid = '#presentations-form-createPresentation';
 
     // Get injected Router reference
     if (options?.Router) this.router = options.Router;
 
     // pagination
     this.cardHeight = 176;
-    this.offset = 440;
+    this.offset = 580;
 
     // register clickhandler
     this.clickHandler = [{
       // Submit button to push form-data to database
       querySelector: '#presentations-btn-submit',
       callback: async (event) => {
+        event.preventDefault();
         const formValues = this.getFormValues('#presentations-form-createPresentation');
         if (this.isFilled(formValues['presentations-input-title']) && this.isFilled(formValues['presentations-input-date']) && this.isFilled(formValues['presentations-select-cinema'])) {
-          const response = await this.postData('/presentations', { movieTitle: formValues['presentations-input-title'], date: formValues['presentations-input-date'], cinema: mongoose.Types.ObjectId(formValues['presentations-select-cinema']) });
-          window.location.reload();
+          const data = { movieTitle: formValues['presentations-input-title'], date: formValues['presentations-input-date'], cinema: formValues['presentations-select-cinema'] };
+          console.log(data);
+          const response = await this.postData('/presentations', data);
           console.log(response);
+          window.location.reload();
         } else {
           window.alert('Alle Felder müssen ausgefüllt sein, um ein Kino erstellen zu können!');
         }
@@ -114,27 +117,27 @@ module.exports = class PresentationsPage extends AbstractPage {
     </div>
     
     <!-- Pagination -->
-          <div uk-container class="uk-margin">
-            <ul class="uk-pagination" style="justify-content:center">
-              <li><a href="javascript:void(0)" class="previousPage"><span uk-pagination-previous></span></a></li>
-              {{#each pages}}
-                <li {{#if (eq this ../currentPage)}}class="uk-active"{{/if}}>
-                  {{#if (eq this ../currentPage)}}
-                    <span>{{this}}</span>
-                  {{else}} 
-                    <a href="javascript:void(0)" data-page="{{this}}" class="changeToPage">{{this}}</a>
-                  {{/if}}
-                </li>
-              {{/each}}
-              <li><a href="javascript:void(0)" class="nextPage"><span uk-pagination-next></span></a></li>
-            </ul>
-          </div>
-          `;
+    <div uk-container class="uk-margin">
+      <ul class="uk-pagination" style="justify-content:center">
+        <li><a href="javascript:void(0)" class="previousPage"><span uk-pagination-previous></span></a></li>
+        {{#each pages}}
+          <li {{#if (eq this ../currentPage)}}class="uk-active"{{/if}}>
+            {{#if (eq this ../currentPage)}}
+              <span>{{this}}</span>
+            {{else}} 
+              <a href="javascript:void(0)" data-page="{{this}}" class="changeToPage">{{this}}</a>
+            {{/if}}
+          </li>
+        {{/each}}
+        <li><a href="javascript:void(0)" class="nextPage"><span uk-pagination-next></span></a></li>
+      </ul>
+    </div>`;
 
     const data = {
       presentations: displayedPresentations,
       cinemas: this.cinemas,
-      pages: this.pages
+      pages: this.pages,
+      currentPage: this.currentPage
     };
 
     return this.renderHandleBars(template, data);

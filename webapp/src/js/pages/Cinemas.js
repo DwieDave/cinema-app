@@ -4,19 +4,21 @@ module.exports = class CinemasPage extends AbstractPage {
   constructor (options) {
     super();
     this.mode = window.localStorage.getItem('mode');
+    this.formid = '#cinemas-form-createCinema';
 
     // Get injected Router reference
     if (options?.Router) this.router = options.Router;
 
     // pagination
     this.cardHeight = 186;
-    this.offset = 440;
+    this.offset = 580;
 
     // register clickhandler
     this.clickHandler = [{
       // Submit button to push form-data to database
       querySelector: '#cinemas-btn-submit',
       callback: async (event) => {
+        event.preventDefault();
         const formValues = this.getFormValues('#cinemas-form-createCinema');
         if (this.isFilled(formValues['cinemas-input-name']) && this.isFilled(formValues['cinemas-input-seatRows']) && this.isFilled(formValues['cinemas-input-seatsPerRow'])) {
           const response = await this.postData('/cinemas', { name: formValues['cinemas-input-name'], seatRows: formValues['cinemas-input-seatRows'], seatsPerRow: formValues['cinemas-input-seatsPerRow'] });
@@ -76,7 +78,7 @@ module.exports = class CinemasPage extends AbstractPage {
                             <button style="height:40px;" class="uk-button uk-button-default uk-margin-top uk-button-primary" id="cinemas-btn-submit">Erstellen</button>
                           </div>
                         </div>                        
-                    </fieldset>
+                      </fieldset>
                 </form>
                 <hr>
             </div>
@@ -119,7 +121,8 @@ module.exports = class CinemasPage extends AbstractPage {
 
     const data = {
       cinemas: displayedCinemas,
-      pages: this.pages
+      pages: this.pages,
+      currentPage: this.currentPage
     };
 
     return this.renderHandleBars(template, data);
