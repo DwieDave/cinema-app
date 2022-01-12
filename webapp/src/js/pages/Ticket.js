@@ -73,14 +73,17 @@ module.exports = class TicketPage extends AbstractPage {
   }
 
   changeToPage (event) {
-    if (event?.currentTarget?.dataset?.page) this.currentPage = parseInt(event.currentTarget.dataset.page);
-    else if (event.currentTarget.classList.value.indexOf('nextPage') !== -1) {
-      if (this.currentPage + 1 <= this.pages[this.pages.length - 1]) this.currentPage++;
-    } else if (event.currentTarget.classList.value.indexOf('previousPage') !== -1) {
-      if (this.currentPage - 1 > 0) this.currentPage--;
+    if (event?.currentTarget) {
+      const element = event.currentTarget;
+      if (element.dataset?.page) this.currentPage = parseInt(element.dataset.page);
+      else if (element.classList.value.indexOf('nextPage') !== -1) {
+        if (this.currentPage + 1 <= this.pages[this.pages.length - 1]) this.currentPage++;
+      } else if (element.classList.value.indexOf('previousPage') !== -1) {
+        if (this.currentPage - 1 > 0) this.currentPage--;
+      }
+      this.saveForm();
+      this.router.renderPage({ animation: false });
     }
-    this.saveForm();
-    this.router.renderPage({ animation: false });
   }
 
   async sendTicket (event) {
@@ -151,7 +154,7 @@ module.exports = class TicketPage extends AbstractPage {
       });
     }
 
-    // Calculate start and end of displayed array slice 
+    // Calculate start and end of displayed array slice
     const start = ((this.currentPage - 1) * (this.elementsPerPage));
     const end = (this.currentPage * this.elementsPerPage < this.presentations.length) ? (this.currentPage * this.elementsPerPage) : (this.presentations.length - 1);
     const displayedPresentations = this.presentations.slice(start, end);
@@ -172,9 +175,9 @@ module.exports = class TicketPage extends AbstractPage {
                         class="uk-card uk-card-default uk-card-body presentationCard{{#if (eq this._id ../activePresentation)}} uk-card-primary{{/if}}">
                         <h4>{{this.movieTitle}}</h4>
                         <ul class="uk-list">
-                            <li><strong>Datum:</strong><br>{{this.date}}</li>
-                            <li><strong>Kinosaal:</strong><br>{{this.cinema.name}}</li>
-                            <li><strong>Freie Plätze:</strong><br>{{this.freeSeats}}</li>
+                            <li><strong>Datum:</strong> {{this.date}}</li>
+                            <li><strong>Kino:</strong> {{this.cinema.name}}</li>
+                            <li><strong>Freie Plätze:</strong> {{this.freeSeats}}</li>
                         </ul>
                     </div>
                 </div>
