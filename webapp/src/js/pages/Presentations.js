@@ -36,56 +36,64 @@ module.exports = class PresentationsPage extends AbstractPage {
     // TODO: sendData via AbstractPage, display inserted presentations in paginated list
 
     const template =
-    `<div class="uk-container uk-margin-large-top" id="presentations-div-newPresentation">
-        <div class="uk-container-xsmall uk-margin-top">
+    `<div class="uk-container uk-margin-small-top" id="presentations-div-newPresentation">
+        <div class="uk-margin-top">
           <form class="uk-margin-top uk-form-stacked" id="presentations-form-createPresentation">
             <fieldset class="uk-fieldset">
               <legend class="uk-legend uk-margin-bottom">Neue Vorführung anlegen</legend>
-
-              <label class="uk-form-label" for="presentations-input-title">Titel des Films</label>
-              <div class="uk-form-controls">
-                  <input class="uk-input" id="presentations-input-title" name="presentations-input-title" type="text" placeholder="">
-              </div>
-
-              <div class="uk-margin">
-                <label class="uk-form-label" for="presentations-input-date">Datum</label>
-                <div class="uk-form-controls">
-                    <input class="uk-input" id="presentations-input-date" name="presentations-input-date" type="date" placeholder="">
+              
+              <div class="uk-grid-match uk-margin" uk-grid>
+                <div class="uk-width-expand@m">
+                  <label class="uk-form-label" for="presentations-input-title">Titel des Films*</label>
+                  <div class="uk-form-controls">
+                      <input class="uk-input" id="presentations-input-title" name="presentations-input-title" type="text" placeholder="">
+                  </div>
                 </div>
-              </div>
 
-              <label class="uk-form-label" for="presentations-select-cinema">Kino</label>
-              <div class="uk-form-controls">
-                  <select class="uk-select" id="presentations-select-cinema" name="presentations-select-cinema">
-                    {{#each cinemas}}
-                    <option value="{{this._id}}">{{this.name}}</option>
-                    {{/each}}
-                  </select>
+                <div class="uk-width-expand@m">
+                  <label class="uk-form-label" for="presentations-input-date">Datum*</label>
+                  <div class="uk-form-controls">
+                      <input class="uk-input" id="presentations-input-date" name="presentations-input-date" type="date" placeholder="">
+                  </div>
+                </div>
+                
+                <div class="uk-width-expand@m">
+                  <label class="uk-form-label" for="presentations-select-cinema">Kino*</label>
+                  <div class="uk-form-controls">
+                      <select class="uk-select" id="presentations-select-cinema" name="presentations-select-cinema">
+                        {{#each cinemas}}
+                        <option value="{{this._id}}">{{this.name}}</option>
+                        {{/each}}
+                      </select>
+                  </div>
+                </div>
+                <div class="uk-width-auto@m" style="align-items:end">
+                  <button style="height:40px;" class="uk-button uk-button-default uk-margin-top uk-button-primary" id="presentations-btn-submit">Erstellen</button>
+                </div>
               </div>
             </fieldset>
           </form>
-          <button class="uk-button uk-button-default uk-margin-top" id="presentations-btn-submit">Erstellen</button>
           <hr>
         </div>
-        
-        <div class="uk-container" id="presentation-div-presentationList">
-          <h2> Vorführungen </h2>
+      </div>
 
-          <ul class="uk-list">
+      <div class="uk-container" id="cinemas-div-cinemaList">
+        <h2> Vorführungen </h2>
+
+        <div class="uk-child-width-expand@s uk-text-center uk-grid-match" uk-grid>
             {{#each presentations}}
-            <li class="uk-margin-small-top">
-              <h3>{{this.movieTitle}}</h3>
-              <div>
-                <ul class="uk-list uk-list-disc">
-                  <li>Datum: {{this.date}}</li>
-                  <li>Kino: {{this.cinema.name}}</li>
-                </ul>
-              </div>
-            </li>
+            <div class="uk-width-1-3@m">
+                <div class="uk-card uk-card-default uk-card-body">
+                    <h4>{{this.movieTitle}}</h4>
+                    <ul class="uk-list">
+                        <li><strong>Datum:</strong> {{this.date}}</li>
+                        <li><strong>Kino:</strong> {{this.cinema.name}}</li>
+                    </ul>
+                </div>
+            </div> 
             {{/each}}
-          </ul>
         </div>
-      </div>`;
+    </div>`;
 
     return this.renderHandleBars(template, { presentations, cinemas });
   }

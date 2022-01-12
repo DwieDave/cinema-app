@@ -38,24 +38,25 @@ module.exports = class CinemasPage extends AbstractPage {
             <div class="uk-margin-top">
                 <form class="uk-margin-top uk-form-stacked" id="cinemas-form-createCinema">
                     <fieldset class="uk-fieldset">
-                        <legend class="uk-legend">Neues Kino anlegen</legend>
+                        <legend class="uk-legend uk-margin-bottom">Neues Kino anlegen</legend>
+
                         <div class="uk-grid-match uk-margin" uk-grid>
                           <div class="uk-width-expand@m">
-                            <label class="uk-form-label" for="cinemas-input-name">Name</label>
+                            <label class="uk-form-label" for="cinemas-input-name">Name*</label>
                             <div class="uk-form-controls">
                                 <input class="uk-input" id="cinemas-input-name" name="cinemas-input-name" type="text"
                                     placeholder="">
                             </div>
                           </div>
                           <div class="uk-width-expand@m">
-                            <label class="uk-form-label" for="cinemas-input-seatRows">Anzahl der Reihen</label>
+                            <label class="uk-form-label" for="cinemas-input-seatRows">Anzahl der Reihen*</label>
                             <div class="uk-form-controls">
                                 <input class="uk-input" id="cinemas-input-seatRows" name="cinemas-input-seatRows" type="number"
                                     placeholder="">
                             </div>
                           </div>
                           <div class="uk-width-expand@m">
-                            <label class="uk-form-label" for="cinemas-input-seatsPerRow">Anzahl der Sitzplätze pro Reihe</label>
+                            <label class="uk-form-label" for="cinemas-input-seatsPerRow">Anzahl der Sitzplätze pro Reihe*</label>
                             <div class="uk-form-controls">
                                 <input class="uk-input" id="cinemas-input-seatsPerRow" name="cinemas-input-seatsPerRow"
                                     type="number" placeholder="">
@@ -70,8 +71,8 @@ module.exports = class CinemasPage extends AbstractPage {
                 <hr>
             </div>
         </div>
-        <div class="uk-container">
-        <div id="cinemas-div-cinemaList">
+        
+        <div class="uk-container" id="cinemas-div-cinemaList">
             <h2> Kinosäle </h2>
             
                 <div class="uk-child-width-expand@s uk-text-center uk-grid-match" uk-grid>
@@ -80,15 +81,14 @@ module.exports = class CinemasPage extends AbstractPage {
                         <div class="uk-card uk-card-default uk-card-body">
                             <h4>{{this.name}}</h4>
                             <ul class="uk-list">
-                                <li>Anzahl der Reihen: {{this.seatRows}}</li>
-                                <li>Anzahl der Sitzplätze pro Reihe: {{this.seatsPerRow}}</li>
+                                <li><strong>Reihen:</strong> {{this.seatRows}}</li>
+                                <li><strong>Sitzplätze pro Reihe:</strong> {{this.seatsPerRow}}</li>
                             </ul>
                         </div>
                     </div> 
                     {{/each}}
                 </div>
-            </div>
-        </div>`;
+            </div>`;
 
     return this.renderHandleBars(template, { cinemas });
   }
