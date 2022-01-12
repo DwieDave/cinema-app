@@ -44,21 +44,21 @@ module.exports = class PresentationsPage extends AbstractPage {
               
               <div class="uk-grid-match uk-margin" uk-grid>
                 <div class="uk-width-expand@m">
-                  <label class="uk-form-label" for="presentations-input-title">Titel des Films</label>
+                  <label class="uk-form-label" for="presentations-input-title">Titel des Films*</label>
                   <div class="uk-form-controls">
                       <input class="uk-input" id="presentations-input-title" name="presentations-input-title" type="text" placeholder="">
                   </div>
                 </div>
 
                 <div class="uk-width-expand@m">
-                  <label class="uk-form-label" for="presentations-input-date">Datum</label>
+                  <label class="uk-form-label" for="presentations-input-date">Datum*</label>
                   <div class="uk-form-controls">
                       <input class="uk-input" id="presentations-input-date" name="presentations-input-date" type="date" placeholder="">
                   </div>
                 </div>
                 
                 <div class="uk-width-expand@m">
-                  <label class="uk-form-label" for="presentations-select-cinema">Kino</label>
+                  <label class="uk-form-label" for="presentations-select-cinema">Kino*</label>
                   <div class="uk-form-controls">
                       <select class="uk-select" id="presentations-select-cinema" name="presentations-select-cinema">
                         {{#each cinemas}}
@@ -86,7 +86,7 @@ module.exports = class PresentationsPage extends AbstractPage {
                 <div class="uk-card uk-card-default uk-card-body">
                     <h4>{{this.movieTitle}}</h4>
                     <ul class="uk-list">
-                        <li><strong>Datum: /strong> {{this.date}}</li>
+                        <li><strong>Datum:</strong> {{this.date}}</li>
                         <li><strong>Kino:</strong> {{this.cinema.name}}</li>
                     </ul>
                 </div>

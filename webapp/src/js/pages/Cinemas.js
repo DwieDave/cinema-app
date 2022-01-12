@@ -42,21 +42,21 @@ module.exports = class CinemasPage extends AbstractPage {
 
                         <div class="uk-grid-match uk-margin" uk-grid>
                           <div class="uk-width-expand@m">
-                            <label class="uk-form-label" for="cinemas-input-name">Name</label>
+                            <label class="uk-form-label" for="cinemas-input-name">Name*</label>
                             <div class="uk-form-controls">
                                 <input class="uk-input" id="cinemas-input-name" name="cinemas-input-name" type="text"
                                     placeholder="">
                             </div>
                           </div>
                           <div class="uk-width-expand@m">
-                            <label class="uk-form-label" for="cinemas-input-seatRows">Anzahl der Reihen</label>
+                            <label class="uk-form-label" for="cinemas-input-seatRows">Anzahl der Reihen*</label>
                             <div class="uk-form-controls">
                                 <input class="uk-input" id="cinemas-input-seatRows" name="cinemas-input-seatRows" type="number"
                                     placeholder="">
                             </div>
                           </div>
                           <div class="uk-width-expand@m">
-                            <label class="uk-form-label" for="cinemas-input-seatsPerRow">Anzahl der Sitzplätze pro Reihe</label>
+                            <label class="uk-form-label" for="cinemas-input-seatsPerRow">Anzahl der Sitzplätze pro Reihe*</label>
                             <div class="uk-form-controls">
                                 <input class="uk-input" id="cinemas-input-seatsPerRow" name="cinemas-input-seatsPerRow"
                                     type="number" placeholder="">
@@ -81,8 +81,8 @@ module.exports = class CinemasPage extends AbstractPage {
                         <div class="uk-card uk-card-default uk-card-body">
                             <h4>{{this.name}}</h4>
                             <ul class="uk-list">
-                                <li><strong>Anzahl der Reihen:</strong> {{this.seatRows}}</li>
-                                <li><strong>Anzahl der Sitzplätze pro Reihe:</strong> {{this.seatsPerRow}}</li>
+                                <li><strong>Reihen:</strong> {{this.seatRows}}</li>
+                                <li><strong>Sitzplätze pro Reihe:</strong> {{this.seatsPerRow}}</li>
                             </ul>
                         </div>
                     </div> 
