@@ -10,7 +10,7 @@ module.exports = class AbstractPage {
     this.params = params;
     this.formid = '';
 
-    // pagination
+    // Pagination
     this.elementsPerPage = 6;
     this.currentPage = 1;
     this.minElements = 3;
