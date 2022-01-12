@@ -86,7 +86,7 @@ module.exports = class AbstractPage {
     this.router.renderPage({ animation: false });
   }
 
-  calcStartEnd (dbObject) {
+  paginate (dbObject) {
     const start = ((this.currentPage - 1) * (this.elementsPerPage));
     const end = (this.currentPage * this.elementsPerPage < dbObject.length) ? (this.currentPage * this.elementsPerPage) : (dbObject.length);
     const displayedPresentations = dbObject.slice(start, end);

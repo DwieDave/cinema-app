@@ -43,7 +43,7 @@ module.exports = class CinemasPage extends AbstractPage {
     }
 
     // Calculate start and end of displayed array slice
-    const displayedCinemas = this.calcStartEnd(this.cinemas);
+    const displayedCinemas = this.paginate(this.cinemas);
 
     const template =
       `<div class="uk-container uk-margin-small-top" id="cinemas-div-newCinema">

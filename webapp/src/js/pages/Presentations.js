@@ -54,7 +54,7 @@ module.exports = class PresentationsPage extends AbstractPage {
     }
 
     // Calculate start and end of displayed array slice
-    const displayedPresentations = this.calcStartEnd(this.presentations);
+    const displayedPresentations = this.paginate(this.presentations);
 
     const template =
     `<div class="uk-container uk-margin-small-top" id="presentations-div-newPresentation">

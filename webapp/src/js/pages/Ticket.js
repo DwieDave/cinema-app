@@ -116,7 +116,7 @@ module.exports = class TicketPage extends AbstractPage {
     }
 
     // Calculate start and end of displayed array slice
-    const displayedPresentations = this.calcStartEnd(this.presentations);
+    const displayedPresentations = this.paginate(this.presentations);
 
     const template =
       `<div id="TicketPage">
