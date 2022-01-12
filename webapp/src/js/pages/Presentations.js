@@ -2,9 +2,16 @@ const AbstractPage = require('./AbstractPage');
 const mongoose = require('mongoose');
 
 module.exports = class PresentationsPage extends AbstractPage {
-  constructor () {
+  constructor (options) {
     super();
     this.mode = window.localStorage.getItem('mode');
+
+    // Get injected Router reference
+    if (options?.Router) this.router = options.Router;
+
+    // pagination
+    this.cardHeight = 176;
+    this.offset = 440;
 
     // register clickhandler
     this.clickHandler = [{
@@ -21,19 +28,30 @@ module.exports = class PresentationsPage extends AbstractPage {
         }
       }
     }];
+
+    this.addPaginationHandler();
+    this.addPaginationListener();
   }
 
   async render () {
     document.title = 'Cinema-App: Home';
 
-    const presentations = await this.getData('/presentations');
-    const cinemas = await this.getData('/cinemas');
-    console.log('PRESENTATIONS', presentations);
-    console.log('CINEMAS', cinemas);
+    // Cache presentations in Class property
+    if (!this.presentations) {
+      this.presentations = await this.getData('/presentations');
+      this.presentations = this.presentations.map(pres => {
+        pres.date = this.formatDate(pres.date);
+        return pres;
+      });
+    }
 
-    // TODO: Template for a paginated presentation display
-    // TODO: Template for a new presentation form with send Button
-    // TODO: sendData via AbstractPage, display inserted presentations in paginated list
+    // Cache cinemas in Class property
+    if (!this.cinemas) {
+      this.cinemas = await this.getData('/cinemas');
+    }
+
+    // Calculate start and end of displayed array slice
+    const displayedPresentations = this.calcStartEnd(this.presentations);
 
     const template =
     `<div class="uk-container uk-margin-small-top" id="presentations-div-newPresentation">
@@ -93,8 +111,32 @@ module.exports = class PresentationsPage extends AbstractPage {
             </div> 
             {{/each}}
         </div>
-    </div>`;
+    </div>
+    
+    <!-- Pagination -->
+          <div uk-container class="uk-margin">
+            <ul class="uk-pagination" style="justify-content:center">
+              <li><a href="javascript:void(0)" class="previousPage"><span uk-pagination-previous></span></a></li>
+              {{#each pages}}
+                <li {{#if (eq this ../currentPage)}}class="uk-active"{{/if}}>
+                  {{#if (eq this ../currentPage)}}
+                    <span>{{this}}</span>
+                  {{else}} 
+                    <a href="javascript:void(0)" data-page="{{this}}" class="changeToPage">{{this}}</a>
+                  {{/if}}
+                </li>
+              {{/each}}
+              <li><a href="javascript:void(0)" class="nextPage"><span uk-pagination-next></span></a></li>
+            </ul>
+          </div>
+          `;
 
-    return this.renderHandleBars(template, { presentations, cinemas });
+    const data = {
+      presentations: displayedPresentations,
+      cinemas: this.cinemas,
+      pages: this.pages
+    };
+
+    return this.renderHandleBars(template, data);
   }
 };
