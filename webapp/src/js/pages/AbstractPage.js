@@ -10,7 +10,7 @@ module.exports = class AbstractPage {
     this.params = params;
     this.formid = '';
 
-    // pagination
+    // Pagination
     this.elementsPerPage = 6;
     this.currentPage = 1;
     this.minElements = 3;
@@ -76,15 +76,17 @@ module.exports = class AbstractPage {
   }
 
   calculateElementsPerPage () {
+    const oldval = this.elementsPerPage;
     const height = window.innerHeight;
     const heightForGrid = height - this.offset;
     const newAmount = Math.floor(heightForGrid / this.cardHeight) * this.elementsPerRow;
     this.elementsPerPage = newAmount >= this.minElements ? newAmount : this.minElements;
+    if (this.elementsPerPage !== oldval) this.currentPage = 1;
     this.saveForm();
     this.router.renderPage({ animation: false });
   }
 
-  calcStartEnd (dbObject) {
+  paginate (dbObject) {
     const start = ((this.currentPage - 1) * (this.elementsPerPage));
     const end = (this.currentPage * this.elementsPerPage < dbObject.length) ? (this.currentPage * this.elementsPerPage) : (dbObject.length);
     const displayedPresentations = dbObject.slice(start, end);

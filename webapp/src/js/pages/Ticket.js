@@ -10,7 +10,7 @@ module.exports = class TicketPage extends AbstractPage {
     // Get injected Router reference
     if (options?.Router) this.router = options.Router;
 
-    // pagination
+    // Pagination
     this.cardHeight = 200;
     this.offset = 550;
 
@@ -116,7 +116,7 @@ module.exports = class TicketPage extends AbstractPage {
     }
 
     // Calculate start and end of displayed array slice
-    const displayedPresentations = this.calcStartEnd(this.presentations);
+    const displayedPresentations = this.paginate(this.presentations);
 
     const template =
       `<div id="TicketPage">
