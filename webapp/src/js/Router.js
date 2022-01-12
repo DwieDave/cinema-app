@@ -65,15 +65,6 @@ module.exports = class Router {
       appContainer.innerHTML = '';
       appContainer.innerHTML = await this.page.render();
 
-      // Workaround to re-trigger uikit animation on pageRender
-      if (options?.animation !== false) {
-        appContainer.style.animation = 'none';
-        ((element) => {
-          return element.offsetHeight;
-        })(appContainer);
-        appContainer.style.animation = null;
-      }
-
       // registering pages clickHandlers - if given via clickHandler attribute
       const clickHandlers = this.page.clickHandler;
       if (clickHandlers?.length > 0) {
@@ -89,6 +80,17 @@ module.exports = class Router {
           eventListener.element.addEventListener(eventListener.event, debounce(200, (event) => { eventListener.callback(); }));
           // this.page.registerClickHandler(clickHandler.querySelector, clickHandler.callback);
         }
+      }
+
+      // Workaround to re-trigger uikit animation on pageRender
+      if (options?.animation !== false) {
+        appContainer.style.animation = 'none';
+        ((element) => {
+          return element.offsetHeight;
+        })(appContainer);
+        appContainer.style.animation = null;
+        // Re-trigger pagination
+        window.dispatchEvent(new Event('resize'));
       }
     }
   }
