@@ -9,7 +9,8 @@ module.exports = class TicketPage extends AbstractPage {
     // Get injected Router reference
     if (options?.Router) this.router = options.Router;
 
-    // pagination offset
+    // pagination
+    this.cardHeight = 272;
     this.offset = 520;
 
     // Fill ClickHandler Array

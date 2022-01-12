@@ -13,7 +13,6 @@ module.exports = class AbstractPage {
     this.elementsPerPage = 6;
     this.currentPage = 1;
     this.minElements = 3;
-    this.cardHeight = 272;
     this.elementsPerRow = 3;
     this.minElements = 3;
 

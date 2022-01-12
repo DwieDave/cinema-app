@@ -8,8 +8,9 @@ module.exports = class CinemasPage extends AbstractPage {
     // Get injected Router reference
     if (options?.Router) this.router = options.Router;
 
-    // pagination offset
-    this.offset = 390;
+    // pagination
+    this.cardHeight = 186;
+    this.offset = 440;
 
     // register clickhandler
     this.clickHandler = [{
@@ -100,8 +101,8 @@ module.exports = class CinemasPage extends AbstractPage {
             </div>
             
             <!-- Pagination -->
-            <div uk-container>
-              <ul class="uk-pagination uk-margin" style="justify-content:center">
+            <div uk-container class="uk-margin">
+              <ul class="uk-pagination" style="justify-content:center">
                 <li><a href="javascript:void(0)" class="previousPage"><span uk-pagination-previous></span></a></li>
                 {{#each pages}}
                   <li {{#if (eq this ../currentPage)}}class="uk-active"{{/if}}>
