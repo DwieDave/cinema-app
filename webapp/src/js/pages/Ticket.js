@@ -5,13 +5,14 @@ module.exports = class TicketPage extends AbstractPage {
     super();
 
     this.mode = window.localStorage.getItem('mode');
+    this.formid = '#newTicketForm';
 
     // Get injected Router reference
     if (options?.Router) this.router = options.Router;
 
     // pagination
-    this.cardHeight = 272;
-    this.offset = 520;
+    this.cardHeight = 200;
+    this.offset = 550;
 
     // Fill ClickHandler Array
     this.clickHandler = [{
@@ -46,23 +47,6 @@ module.exports = class TicketPage extends AbstractPage {
     this.router.renderPage({ animation: false });
   }
 
-<<<<<<< HEAD
-  changeToPage (event) {
-    if (event?.currentTarget) {
-      const element = event.currentTarget;
-      if (element.dataset?.page) this.currentPage = parseInt(element.dataset.page);
-      else if (element.classList.value.indexOf('nextPage') !== -1) {
-        if (this.currentPage + 1 <= this.pages[this.pages.length - 1]) this.currentPage++;
-      } else if (element.classList.value.indexOf('previousPage') !== -1) {
-        if (this.currentPage - 1 > 0) this.currentPage--;
-      }
-      this.saveForm();
-      this.router.renderPage({ animation: false });
-    }
-  }
-
-=======
->>>>>>> a3cf6fe4a9e5873f239c25a9d53ed6489c2b79ac
   async sendTicket (event) {
     // Get form values
     const sendData = this.getFormValues('#newTicketForm');
@@ -137,7 +121,7 @@ module.exports = class TicketPage extends AbstractPage {
     const template =
       `<div id="TicketPage">
         <div class="uk-container uk-margin-medium-top">
-            <h2 class="uk-margin-remove-bottom"> Freie Tickets Reservieren </h2>
+            <h3 class="uk-margin-remove-bottom"> Freie Tickets Reservieren </h3>
             <h4 class="uk-margin-remove-top"> 1. Vorführung auswählen </h4>
 
             <!-- Vorführungs GRID -->
@@ -193,7 +177,7 @@ module.exports = class TicketPage extends AbstractPage {
                                 {{/if}}>
                         </div>
                     </div>
-                    <div class="uk-width-expand@m uk-margin-auto-top" style="max-height: 40px;">
+                    <div class="uk-width-auto@m uk-margin-auto-top" style="max-height: 40px;">
                         <button id="sendTicket" class="uk-button uk-button-primary">Tickets reservieren</button>
                     </div>
                 </div>

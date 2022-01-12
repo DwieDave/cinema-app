@@ -8,13 +8,13 @@ module.exports = class AbstractPage {
   constructor (params) {
     this.apiURL = 'http://localhost:8080/v1';
     this.params = params;
+    this.formid = '';
 
     // pagination
     this.elementsPerPage = 6;
     this.currentPage = 1;
     this.minElements = 3;
     this.elementsPerRow = 3;
-    this.minElements = 3;
 
     // Helpers for example for comparing two arrows or chaining expressions
     Handlebars.registerHelper({
@@ -51,7 +51,14 @@ module.exports = class AbstractPage {
       element: window,
       event: 'resize',
       callback: (event) => {
-        this.calculateElementsPerPage(this.cardHeight, this.offset, this.elementsPerRow, this.minElements);
+        this.calculateElementsPerPage();
+      }
+    });
+    this.eventListener.push({
+      element: window,
+      event: 'DOMContentLoaded',
+      callback: (event) => {
+        this.calculateElementsPerPage();
       }
     });
   }
@@ -68,11 +75,11 @@ module.exports = class AbstractPage {
     this.router.renderPage({ animation: false });
   }
 
-  calculateElementsPerPage (cardHeight, offset, elementsPerRow, minElements) {
+  calculateElementsPerPage () {
     const height = window.innerHeight;
-    const heightForGrid = height - offset;
-    const newAmount = Math.floor(heightForGrid / cardHeight) * elementsPerRow;
-    this.elementsPerPage = newAmount >= minElements ? newAmount : minElements;
+    const heightForGrid = height - this.offset;
+    const newAmount = Math.floor(heightForGrid / this.cardHeight) * this.elementsPerRow;
+    this.elementsPerPage = newAmount >= this.minElements ? newAmount : this.minElements;
     this.saveForm();
     this.router.renderPage({ animation: false });
   }
@@ -83,13 +90,12 @@ module.exports = class AbstractPage {
     const displayedPresentations = dbObject.slice(start, end);
     const lastPage = Math.ceil(dbObject.length / this.elementsPerPage);
     this.pages = Array.from(Array(lastPage).keys(), (_, i) => i + 1);
-
     return displayedPresentations;
   }
 
   saveForm () {
-    if (this.isValid(this.getFormValues('#newTicketForm'))) {
-      this.form = this.getFormValues('#newTicketForm');
+    if (this.isValid(this.getFormValues(this.formid))) {
+      this.form = this.getFormValues(this.formid);
     }
   }
 
