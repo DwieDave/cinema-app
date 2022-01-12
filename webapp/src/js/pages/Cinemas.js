@@ -9,11 +9,11 @@ module.exports = class CinemasPage extends AbstractPage {
     // Get injected Router reference
     if (options?.Router) this.router = options.Router;
 
-    // pagination
+    // Pagination
     this.cardHeight = 186;
     this.offset = 580;
 
-    // register clickhandler
+    // Register clickhandler
     this.clickHandler = [{
       // Submit button to push form-data to database
       querySelector: '#cinemas-btn-submit',

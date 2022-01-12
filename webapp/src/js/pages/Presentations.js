@@ -13,7 +13,7 @@ module.exports = class PresentationsPage extends AbstractPage {
     this.cardHeight = 176;
     this.offset = 580;
 
-    // register clickhandler
+    // Register clickhandler
     this.clickHandler = [{
       // Submit button to push form-data to database
       querySelector: '#presentations-btn-submit',
