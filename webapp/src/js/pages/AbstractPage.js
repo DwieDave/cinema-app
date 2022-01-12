@@ -80,7 +80,7 @@ module.exports = class AbstractPage {
 
   calcStartEnd (dbObject) {
     const start = ((this.currentPage - 1) * (this.elementsPerPage));
-    const end = (this.currentPage * this.elementsPerPage < dbObject.length) ? (this.currentPage * this.elementsPerPage) : (dbObject.length - 1);
+    const end = (this.currentPage * this.elementsPerPage < dbObject.length) ? (this.currentPage * this.elementsPerPage) : (dbObject.length);
     const displayedPresentations = dbObject.slice(start, end);
     const lastPage = Math.ceil(dbObject.length / this.elementsPerPage);
     this.pages = Array.from(Array(lastPage).keys(), (_, i) => i + 1);
