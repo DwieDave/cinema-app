@@ -4,15 +4,13 @@ module.exports = class TicketPage extends AbstractPage {
   constructor (options) {
     super();
 
-    // Pagination
-    this.elementsPerPage = 6;
-    this.currentPage = 1;
-    this.minElements = 3;
-
     this.mode = window.localStorage.getItem('mode');
 
     // Get injected Router reference
     if (options?.Router) this.router = options.Router;
+
+    // pagination offset
+    this.offset = 520;
 
     // Fill ClickHandler Array
     this.clickHandler = [{
@@ -32,35 +30,10 @@ module.exports = class TicketPage extends AbstractPage {
         this.printReservation();
         event.preventDefault();
       }
-    }, {
-      querySelector: '.changeToPage, .nextPage, .previousPage',
-      callback: (event) => {
-        this.changeToPage(event);
-        event.preventDefault();
-      }
     }];
 
-    this.eventListener = [{
-      element: window,
-      event: 'resize',
-      callback: (event) => {
-        this.calculateElementsPerPage();
-      }
-    }];
-  }
-
-  calculateElementsPerPage () {
-    const cardHeight = 272;
-    const height = window.innerHeight;
-    const heightForGrid = height - 520;
-    const newAmount = Math.floor(heightForGrid / cardHeight) * 3;
-    this.elementsPerPage = newAmount >= this.minElements ? newAmount : this.minElements;
-    this.saveForm();
-    this.router.renderPage({ animation: false });
-  }
-
-  saveForm () {
-    this.form = this.getFormValues('#newTicketForm');
+    this.addPaginationHandler();
+    this.addPaginationListener();
   }
 
   selectPresentation (event) {
@@ -69,17 +42,6 @@ module.exports = class TicketPage extends AbstractPage {
     // Save form in class attribute
     this.saveForm();
     // Re-Render Page without animation
-    this.router.renderPage({ animation: false });
-  }
-
-  changeToPage (event) {
-    if (event?.currentTarget?.dataset?.page) this.currentPage = parseInt(event.currentTarget.dataset.page);
-    else if (event.currentTarget.classList.value.indexOf('nextPage') !== -1) {
-      if (this.currentPage + 1 <= this.pages[this.pages.length - 1]) this.currentPage++;
-    } else if (event.currentTarget.classList.value.indexOf('previousPage') !== -1) {
-      if (this.currentPage - 1 > 0) this.currentPage--;
-    }
-    this.saveForm();
     this.router.renderPage({ animation: false });
   }
 
@@ -151,12 +113,8 @@ module.exports = class TicketPage extends AbstractPage {
       });
     }
 
-    // Calculate start and end of displayed array slice 
-    const start = ((this.currentPage - 1) * (this.elementsPerPage));
-    const end = (this.currentPage * this.elementsPerPage < this.presentations.length) ? (this.currentPage * this.elementsPerPage) : (this.presentations.length - 1);
-    const displayedPresentations = this.presentations.slice(start, end);
-    const lastPage = Math.ceil(this.presentations.length / this.elementsPerPage);
-    this.pages = Array.from(Array(lastPage).keys(), (_, i) => i + 1);
+    // Calculate start and end of displayed array slice
+    const displayedPresentations = this.calcStartEnd(this.presentations);
 
     const template =
       `<div id="TicketPage">

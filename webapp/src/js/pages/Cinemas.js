@@ -1,9 +1,15 @@
 const AbstractPage = require('./AbstractPage');
 
 module.exports = class CinemasPage extends AbstractPage {
-  constructor () {
+  constructor (options) {
     super();
     this.mode = window.localStorage.getItem('mode');
+
+    // Get injected Router reference
+    if (options?.Router) this.router = options.Router;
+
+    // pagination offset
+    this.offset = 390;
 
     // register clickhandler
     this.clickHandler = [{
@@ -20,18 +26,21 @@ module.exports = class CinemasPage extends AbstractPage {
         }
       }
     }];
+
+    this.addPaginationHandler();
+    this.addPaginationListener();
   }
 
   async render () {
     document.title = 'Cinema-App: Kinosäle';
 
-    const cinemas = await this.getData('/cinemas');
-    console.log('CINEMAS: ', cinemas);
+    // Cache cinemas in Class property
+    if (!this.cinemas) {
+      this.cinemas = await this.getData('/cinemas');
+    }
 
-    // GetData via AbstractPage
-    // Template for a paginated cinema display
-    // Template for a new cinema form with send Button
-    // sendData via AbstractPage, display inserted cinema in paginated list
+    // Calculate start and end of displayed array slice
+    const displayedCinemas = this.calcStartEnd(this.cinemas);
 
     const template =
       `<div class="uk-container uk-margin-small-top" id="cinemas-div-newCinema">
@@ -88,8 +97,30 @@ module.exports = class CinemasPage extends AbstractPage {
                     </div> 
                     {{/each}}
                 </div>
+            </div>
+            
+            <!-- Pagination -->
+            <div uk-container>
+              <ul class="uk-pagination uk-margin" style="justify-content:center">
+                <li><a href="javascript:void(0)" class="previousPage"><span uk-pagination-previous></span></a></li>
+                {{#each pages}}
+                  <li {{#if (eq this ../currentPage)}}class="uk-active"{{/if}}>
+                    {{#if (eq this ../currentPage)}}
+                      <span>{{this}}</span>
+                    {{else}} 
+                      <a href="javascript:void(0)" data-page="{{this}}" class="changeToPage">{{this}}</a>
+                    {{/if}}
+                  </li>
+                {{/each}}
+                <li><a href="javascript:void(0)" class="nextPage"><span uk-pagination-next></span></a></li>
+              </ul>
             </div>`;
 
-    return this.renderHandleBars(template, { cinemas });
+    const data = {
+      cinemas: displayedCinemas,
+      pages: this.pages
+    };
+
+    return this.renderHandleBars(template, data);
   }
 };
