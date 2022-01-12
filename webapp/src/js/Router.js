@@ -81,6 +81,15 @@ module.exports = class Router {
           this.page.registerClickHandler(clickHandler.querySelector, clickHandler.callback);
         }
       }
+
+      // registering pages clickHandlers - if given via clickHandler attribute
+      const eventListeners = this.page.eventListener;
+      if (eventListeners?.length > 0) {
+        for (const eventListener of eventListeners) {
+          eventListener.element.addEventListener(eventListener.event, debounce(200, (event) => { eventListener.callback(); }));
+          // this.page.registerClickHandler(clickHandler.querySelector, clickHandler.callback);
+        }
+      }
     }
   }
 
@@ -97,3 +106,11 @@ module.exports = class Router {
     window.history.pushState(null, null, url);
   }
 };
+
+function debounce (time, func) {
+  let timer;
+  return function (event) {
+    if (timer) clearTimeout(timer);
+    timer = setTimeout(func, time, event);
+  };
+}

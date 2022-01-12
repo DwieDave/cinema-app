@@ -37,6 +37,7 @@ function containsAnyString (string, stringsToCheck) {
 async function calculateFreeSeats (presentationId) {
   // Get Presentation based on id provided in body
   const presentation = await Presentation.findById(presentationId).populate('cinema').exec();
+
   // calculate cinemas total seats:
   const totalSeats = presentation.cinema.seatRows * presentation.cinema.seatsPerRow;
 

@@ -8,6 +8,13 @@ module.exports = class AbstractPage {
   constructor (params) {
     this.apiURL = 'http://localhost:8080/v1';
     this.params = params;
+    this.formid = '';
+
+    // pagination
+    this.elementsPerPage = 6;
+    this.currentPage = 1;
+    this.minElements = 3;
+    this.elementsPerRow = 3;
 
     // Helpers for example for comparing two arrows or chaining expressions
     Handlebars.registerHelper({
@@ -24,6 +31,72 @@ module.exports = class AbstractPage {
         return Array.prototype.slice.call(arguments, 0, -1).some(Boolean);
       }
     });
+  }
+
+  // Pagination
+  addPaginationHandler () {
+    if (!this.isValid(this.clickHandler)) this.clickHandler = [];
+    this.clickHandler.push({
+      querySelector: '.changeToPage, .nextPage, .previousPage',
+      callback: (event) => {
+        this.changeToPage(event);
+        event.preventDefault();
+      }
+    });
+  }
+
+  addPaginationListener () {
+    if (!this.isValid(this.eventListener)) this.eventListener = [];
+    this.eventListener.push({
+      element: window,
+      event: 'resize',
+      callback: (event) => {
+        this.calculateElementsPerPage();
+      }
+    });
+    this.eventListener.push({
+      element: window,
+      event: 'DOMContentLoaded',
+      callback: (event) => {
+        this.calculateElementsPerPage();
+      }
+    });
+  }
+
+  changeToPage (event) {
+    if (event?.currentTarget?.dataset?.page) this.currentPage = parseInt(event.currentTarget.dataset.page);
+    else if (event.currentTarget.classList.value.indexOf('nextPage') !== -1) {
+      if (this.currentPage + 1 <= this.pages[this.pages.length - 1]) this.currentPage++;
+    } else if (event.currentTarget.classList.value.indexOf('previousPage') !== -1) {
+      if (this.currentPage - 1 > 0) this.currentPage--;
+    }
+
+    this.saveForm();
+    this.router.renderPage({ animation: false });
+  }
+
+  calculateElementsPerPage () {
+    const height = window.innerHeight;
+    const heightForGrid = height - this.offset;
+    const newAmount = Math.floor(heightForGrid / this.cardHeight) * this.elementsPerRow;
+    this.elementsPerPage = newAmount >= this.minElements ? newAmount : this.minElements;
+    this.saveForm();
+    this.router.renderPage({ animation: false });
+  }
+
+  calcStartEnd (dbObject) {
+    const start = ((this.currentPage - 1) * (this.elementsPerPage));
+    const end = (this.currentPage * this.elementsPerPage < dbObject.length) ? (this.currentPage * this.elementsPerPage) : (dbObject.length);
+    const displayedPresentations = dbObject.slice(start, end);
+    const lastPage = Math.ceil(dbObject.length / this.elementsPerPage);
+    this.pages = Array.from(Array(lastPage).keys(), (_, i) => i + 1);
+    return displayedPresentations;
+  }
+
+  saveForm () {
+    if (this.isValid(this.getFormValues(this.formid))) {
+      this.form = this.getFormValues(this.formid);
+    }
   }
 
   // render: should return pages rendered HTML as String
@@ -126,6 +199,8 @@ module.exports = class AbstractPage {
       return { error: error };
     }
   }
+
+  /* Pagination functions */
 
   /*
    * UIKit Functions

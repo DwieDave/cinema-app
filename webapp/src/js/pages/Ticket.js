@@ -5,9 +5,14 @@ module.exports = class TicketPage extends AbstractPage {
     super();
 
     this.mode = window.localStorage.getItem('mode');
+    this.formid = '#newTicketForm';
 
     // Get injected Router reference
     if (options?.Router) this.router = options.Router;
+
+    // pagination
+    this.cardHeight = 200;
+    this.offset = 550;
 
     // Fill ClickHandler Array
     this.clickHandler = [{
@@ -28,13 +33,16 @@ module.exports = class TicketPage extends AbstractPage {
         event.preventDefault();
       }
     }];
+
+    this.addPaginationHandler();
+    this.addPaginationListener();
   }
 
   selectPresentation (event) {
     // If presentationid exists on target set activePresentation
     if (event?.currentTarget?.dataset?.presentationid) this.activePresentation = event.currentTarget.dataset.presentationid;
     // Save form in class attribute
-    this.form = this.getFormValues('#newTicketForm');
+    this.saveForm();
     // Re-Render Page without animation
     this.router.renderPage({ animation: false });
   }
@@ -107,12 +115,13 @@ module.exports = class TicketPage extends AbstractPage {
       });
     }
 
-    // TODO: Paginate Presentations
+    // Calculate start and end of displayed array slice
+    const displayedPresentations = this.calcStartEnd(this.presentations);
 
     const template =
       `<div id="TicketPage">
         <div class="uk-container uk-margin-medium-top">
-            <h2 class="uk-margin-remove-bottom"> Freie Tickets Reservieren </h2>
+            <h3 class="uk-margin-remove-bottom"> Freie Tickets Reservieren </h3>
             <h4 class="uk-margin-remove-top"> 1. Vorführung auswählen </h4>
 
             <!-- Vorführungs GRID -->
@@ -121,19 +130,35 @@ module.exports = class TicketPage extends AbstractPage {
                 <div class="uk-width-1-3@m">
                     <div data-presentationid="{{this._id}}"
                         class="uk-card uk-card-default uk-card-body presentationCard{{#if (eq this._id ../activePresentation)}} uk-card-primary{{/if}}">
+                        <h4>{{this.movieTitle}}</h4>
                         <ul class="uk-list">
-                            <li><strong>Film:</strong><br>{{this.movieTitle}}</li>
-                            <li><strong>Datum:</strong><br>{{this.date}}</li>
-                            <li><strong>Kinosaal:</strong><br>{{this.cinema.name}}</li>
-                            <li><strong>Freie Plätze:</strong><br>{{this.freeSeats}}</li>
+                            <li><strong>Datum:</strong> {{this.date}}</li>
+                            <li><strong>Kino:</strong> {{this.cinema.name}}</li>
+                            <li><strong>Freie Plätze:</strong> {{this.freeSeats}}</li>
                         </ul>
                     </div>
                 </div>
                 {{/each}}
             </div>
 
+            <!-- Pagination -->
+            <ul class="uk-pagination" uk-margin style="justify-content:center">
+              <li><a href="javascript:void(0)" class="previousPage"><span uk-pagination-previous></span></a></li>
+              {{#each pages}}
+                <li {{#if (eq this ../currentPage)}}class="uk-active"{{/if}}>
+                  {{#if (eq this ../currentPage)}}
+                    <span>{{this}}</span>
+                  {{else}} 
+                    <a href="javascript:void(0)" data-page="{{this}}" class="changeToPage">{{this}}</a>
+                  {{/if}}
+                </li>
+              {{/each}}
+              <li><a href="javascript:void(0)" class="nextPage"><span uk-pagination-next></span></a></li>
+            </ul>
+
             <!-- Reservierungs FORM -->
             {{#if activePresentation}}
+            <hr class="uk-margin-medium-top">
             <h4> 2. Daten eingeben und reservieren </h4>
             <form class="uk-form-stacked" id="newTicketForm">
                 <div class="uk-grid-match uk-margin" uk-grid>
@@ -152,7 +177,7 @@ module.exports = class TicketPage extends AbstractPage {
                                 {{/if}}>
                         </div>
                     </div>
-                    <div class="uk-width-expand@m uk-margin-auto-top" style="max-height: 40px;">
+                    <div class="uk-width-auto@m uk-margin-auto-top" style="max-height: 40px;">
                         <button id="sendTicket" class="uk-button uk-button-primary">Tickets reservieren</button>
                     </div>
                 </div>
@@ -187,10 +212,12 @@ module.exports = class TicketPage extends AbstractPage {
       </div>`;
 
     const data = {
-      presentations: this.presentations,
+      presentations: displayedPresentations,
       activePresentation: this.activePresentation,
       form: this.form,
-      response: this.response
+      response: this.response,
+      currentPage: this.currentPage,
+      pages: this.pages
     };
     return this.renderHandleBars(template, data);
   }
