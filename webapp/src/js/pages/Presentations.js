@@ -9,7 +9,7 @@ module.exports = class PresentationsPage extends AbstractPage {
     // Get injected Router reference
     if (options?.Router) this.router = options.Router;
 
-    // pagination
+    // Pagination
     this.cardHeight = 176;
     this.offset = 580;
 
