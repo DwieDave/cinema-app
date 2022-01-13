@@ -10,8 +10,8 @@ module.exports = class PresentationsPage extends AbstractPage {
     if (options?.Router) this.router = options.Router;
 
     // Pagination
-    this.cardHeight = 176;
-    this.offset = 580;
+    this.cardHeight = 240;
+    this.offset = 470;
 
     // Register clickhandler
     this.clickHandler = [{
@@ -109,6 +109,7 @@ module.exports = class PresentationsPage extends AbstractPage {
                     <ul class="uk-list">
                         <li><strong>Datum:</strong> {{this.date}}</li>
                         <li><strong>Kino:</strong> {{this.cinema.name}}</li>
+                        <li><strong>Freie Plätze:</strong> {{this.freeSeats}}</li>
                     </ul>
                 </div>
             </div> 

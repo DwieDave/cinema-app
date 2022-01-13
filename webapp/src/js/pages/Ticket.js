@@ -11,8 +11,8 @@ module.exports = class TicketPage extends AbstractPage {
     if (options?.Router) this.router = options.Router;
 
     // Pagination
-    this.cardHeight = 200;
-    this.offset = 550;
+    this.cardHeight = 220;
+    this.offset = 490;
 
     // Fill ClickHandler Array
     this.clickHandler = [{
