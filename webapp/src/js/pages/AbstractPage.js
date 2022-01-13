@@ -39,6 +39,8 @@ module.exports = class AbstractPage {
    * Pagination functions
    */
 
+  // TODO: add grid-height to uk-grid so that pagination stays fixed if the page is not filled completely
+
   addPaginationHandler () {
     if (!this.isValid(this.clickHandler)) this.clickHandler = [];
     this.clickHandler.push({
@@ -85,6 +87,7 @@ module.exports = class AbstractPage {
 
   // calculateElementsPerPage: calculates the amount of elements shown on one page
   calculateElementsPerPage () {
+    // TODO: catch responsive design and calculate elements accordingly
     const oldval = this.elementsPerPage;
     const height = window.innerHeight;
     const heightForGrid = height - this.offset;

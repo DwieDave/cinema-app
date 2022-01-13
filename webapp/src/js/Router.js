@@ -6,7 +6,7 @@ const TicketPage = require('./pages/Ticket');
 
 /*  Router: Handles Routes and Pages  */
 module.exports = class Router {
-  constructor() {
+  constructor () {
     // Pages-Array assigns URL-path to Page-Class
     this.pages = [
       { path: '/', pageClass: HomePage },
@@ -38,36 +38,35 @@ module.exports = class Router {
     };
   }
 
-
   /* createPage: creates the instance of a page registered with its class in the pages array
      also handles the routerlinkclickhandler after page rendering as well as error page creation
   */
-  async createPage() {
-    const page = this.findPage(window.location.pathname);
-    if (page) {
-      // creating class
-      const PageClass = (page.pageClass);
+  async createPage () {
+    this.routerpage = this.findPage(window.location.pathname);
+    if (this.routerpage !== null && this.routerpage !== undefined) {
+      // creating object of page class
+      const PageClass = (this.routerpage.pageClass);
       this.page = new PageClass({ Router: this });
-      this.routerpage = page;
-      await this.renderPage(page);
+      await this.renderPage();
       // add click handler for router links after page is rendered to also target
       // routerlinks in page template
       this.addRouterLinkClickHandler();
     } else {
       this.page = new ErrorPage(404, 'Seite nicht gefunden.');
-      await this.renderPage({ path: '/error', pageClass: ErrorPage });
+      this.routerpage = { path: '/error', pageClass: ErrorPage };
+      await this.renderPage();
       this.changeURL('/error');
     }
   }
 
   /* addRouterLinkClickHandler: 1st removes clickHandler (if exists) then re-adds it */
-  addRouterLinkClickHandler() {
+  addRouterLinkClickHandler () {
     document.removeEventListener('click', this.routerLinkListener);
     document.addEventListener('click', this.routerLinkListener, false);
   }
 
   /* findPage: finds page from router Pages array that matches the current location pathname */
-  findPage(urlpath) {
+  findPage (urlpath) {
     if (this.pages?.length > 0) {
       for (const page of this.pages) {
         const routeRegex = new RegExp('^' + page.path.replace(/\//g, '\\/') + '$');
@@ -80,7 +79,8 @@ module.exports = class Router {
   /* renderPage: Creates a Page Class according to the pageClass property of the RouterPage
      Renders HTML content of class and registers clickHandlers of the class if given
      removes/adds ui-kits active class to the menu-entry linking to the current page */
-  async renderPage(options) {
+  async renderPage (options = null) {
+    console.log('renderPage', this.page);
     // setting 'uk-active' class if current path is linked in the menu-item
     const mode = window.localStorage.getItem('mode');
     const menu = document.querySelector('#menu' + mode[0].toUpperCase() + mode.slice(1));
@@ -142,7 +142,7 @@ module.exports = class Router {
 
   /* navigateTo: "soft navigate" to url
         call createPage function to render content based on the new url */
-  navigateTo(url) {
+  navigateTo (url) {
     if (url !== window.location.href) {
       this.changeURL(url);
       this.createPage();
@@ -150,15 +150,15 @@ module.exports = class Router {
   }
 
   /* changeURL: change window url without navigating to it */
-  changeURL(url) {
+  changeURL (url) {
     console.log('changes history to:', url);
     window.history.pushState(null, null, url);
   }
 };
 
-// debounce: debounces function with a timer to ensure 
+// debounce: debounces function with a timer to ensure
 // resize function is only called every x-time and not EVERYTIME
-function debounce(time, func) {
+function debounce (time, func) {
   let timer;
   return function (event) {
     if (timer) clearTimeout(timer);
