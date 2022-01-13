@@ -1,5 +1,7 @@
 const Router = require('./Router');
 
+/*  Application: Handles mode selection, Router creation and setup for the
+    general application */
 module.exports = class Application {
   constructor () {
     // Router initializing
@@ -14,18 +16,11 @@ module.exports = class Application {
   /* addClickListener: adds click Listener for mode Selection & Navigation */
   addClickListener () {
     document.addEventListener('click', (event) => {
-      if (event.target.matches('.modeSelection')) {
-        // Mode selection
-        const mode = event.target.matches('.owner') ? 'owner' : 'customer';
-        this.setMode(mode);
-        this.router.navigateTo('/');
-      } else if (event.target.matches('[data-routerLink]')) {
-        // Router Link Handling:
-        // prevent default link following (would try to open directory /page/cinemas for example)
-        event.preventDefault();
-        // instead navigate with own routing function
-        this.router.navigateTo(event.target.href);
-      }
+      if (!event.target.matches('.modeSelection')) return;
+      // Mode selection
+      const mode = event.target.matches('.owner') ? 'owner' : 'customer';
+      this.setMode(mode);
+      this.router.navigateTo('/');
     }, false);
   }
 

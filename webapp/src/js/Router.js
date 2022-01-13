@@ -22,6 +22,20 @@ module.exports = class Router {
     } else {
       this.createPage();
     }
+
+    this.routerLinkListener = (event) => {
+      if (!event.target.matches('[data-routerLink]')) return;
+      // Router Link Handling:
+      // prevent default link following (would try to open directory /page/cinemas for example)
+      event.preventDefault();
+      // instead navigate with own routing function
+      this.navigateTo(event.target.href);
+    };
+  }
+
+  addRouterLinkClickHandler () {
+    document.removeEventListener('click', this.routerLinkListener);
+    document.addEventListener('click', this.routerLinkListener, false);
   }
 
   async createPage () {
@@ -32,6 +46,7 @@ module.exports = class Router {
       this.page = new PageClass({ Router: this });
       this.routerpage = page;
       await this.renderPage(page);
+      this.addRouterLinkClickHandler();
     } else {
       this.page = new ErrorPage(404, 'Seite nicht gefunden.');
       await this.renderPage({ path: '/error', viewClass: ErrorPage });
@@ -119,12 +134,15 @@ module.exports = class Router {
         call createPage function to render content based on the new url */
 
   navigateTo (url) {
-    this.changeURL(url);
-    this.createPage();
+    if (url !== window.location.href) {
+      this.changeURL(url);
+      this.createPage();
+    }
   }
 
   /*  changeURL: change window url without navigating to it */
   changeURL (url) {
+    console.log('changes history to:', url);
     window.history.pushState(null, null, url);
   }
 };
