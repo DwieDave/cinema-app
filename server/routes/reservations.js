@@ -37,12 +37,12 @@ router.post('/v1/reservations', async (req, res) => {
         // Get newly inserted Reservation with populated presentation and cinema
         const reservation = await Reservation.findById(newReservation._id).select('-__v').populate({
           path: 'presentation',
-          select: '-__v',
-          populate: { path: 'cinema', select: '-__v' }
+          select: '-__v-_id',
+          populate: { path: 'cinema', select: '-__v-_id' }
         }).exec();
 
         // Create QR-Code and respond with it
-        const response = await QRCode.toDataURL(`reservation_id:${newReservation._id}`);
+        const response = await QRCode.toDataURL(JSON.stringify(reservation));
 
         res.json({ qrcode: response, reservation: reservation });
       } catch (error) {
