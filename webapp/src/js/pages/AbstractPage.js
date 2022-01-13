@@ -16,7 +16,7 @@ module.exports = class AbstractPage {
     this.minElements = 3;
     this.elementsPerRow = 3;
 
-    // Helpers for example for comparing two values or chaining expressions
+    // Helpers for comparing two values or chaining expressions
     Handlebars.registerHelper({
       eq: (v1, v2) => v1 === v2,
       ne: (v1, v2) => v1 !== v2,
