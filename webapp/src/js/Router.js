@@ -14,7 +14,14 @@ module.exports = class Router {
       { path: '/page/presentations', viewClass: PresentationsPage }
     ];
     this.registeredListeners = [];
-    this.createPage();
+
+    if (window.location.search && window.location.search !== '') {
+      const redirectPath = decodeURIComponent(window.location.search.replace(/[?=]/g, '').replace('redirect', ''));
+      if (redirectPath[0] === '/') this.navigateTo(redirectPath);
+      console.log(redirectPath, redirectPath[0]);
+    } else {
+      this.createPage();
+    }
   }
 
   async createPage () {
