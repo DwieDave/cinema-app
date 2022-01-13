@@ -83,16 +83,16 @@ module.exports = class AbstractPage {
     this.elementsPerPage = newAmount >= this.minElements ? newAmount : this.minElements;
     if (this.elementsPerPage !== oldval) this.currentPage = 1;
     this.saveForm();
-    this.router.renderPage({ animation: false });
+    if (this.router) this.router.renderPage({ animation: false });
   }
 
   paginate (dbObject) {
     const start = ((this.currentPage - 1) * (this.elementsPerPage));
     const end = (this.currentPage * this.elementsPerPage < dbObject.length) ? (this.currentPage * this.elementsPerPage) : (dbObject.length);
-    const displayedPresentations = dbObject.slice(start, end);
+    const displayedObjects = dbObject.slice(start, end);
     const lastPage = Math.ceil(dbObject.length / this.elementsPerPage);
     this.pages = Array.from(Array(lastPage).keys(), (_, i) => i + 1);
-    return displayedPresentations;
+    return displayedObjects;
   }
 
   saveForm () {
