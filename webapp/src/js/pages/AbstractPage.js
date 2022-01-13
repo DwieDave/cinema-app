@@ -1,6 +1,6 @@
 const Handlebars = require('handlebars');
 const axios = require('axios');
-const UIkit = require('uikit');
+const { modal, notification } = require('uikit');
 
 /*  AbstractPage: Parent-Class for all pages.
     Defines function names and offers common functions */
@@ -16,7 +16,7 @@ module.exports = class AbstractPage {
     this.minElements = 3;
     this.elementsPerRow = 3;
 
-    // Helpers for example for comparing two arrows or chaining expressions
+    // Helpers for example for comparing two values or chaining expressions
     Handlebars.registerHelper({
       eq: (v1, v2) => v1 === v2,
       ne: (v1, v2) => v1 !== v2,
@@ -33,7 +33,12 @@ module.exports = class AbstractPage {
     });
   }
 
-  // Pagination
+  // ----------------------------------------------
+
+  /*
+   * Pagination functions
+   */
+
   addPaginationHandler () {
     if (!this.isValid(this.clickHandler)) this.clickHandler = [];
     this.clickHandler.push({
@@ -45,6 +50,8 @@ module.exports = class AbstractPage {
     });
   }
 
+  /* addPaginationListener: adds Listeners to the eventListeners
+     Array necessary for calculating the amount of elements per page on start and on window.resize */
   addPaginationListener () {
     if (!this.isValid(this.eventListener)) this.eventListener = [];
     this.eventListener.push({
@@ -63,6 +70,7 @@ module.exports = class AbstractPage {
     });
   }
 
+  // changeToPage: changes pages (next, previous, or to specific page based on clicked event target)
   changeToPage (event) {
     if (event?.currentTarget?.dataset?.page) this.currentPage = parseInt(event.currentTarget.dataset.page);
     else if (event.currentTarget.classList.value.indexOf('nextPage') !== -1) {
@@ -75,6 +83,7 @@ module.exports = class AbstractPage {
     this.router.renderPage({ animation: false });
   }
 
+  // calculateElementsPerPage: calculates the amount of elements shown on one page
   calculateElementsPerPage () {
     const oldval = this.elementsPerPage;
     const height = window.innerHeight;
@@ -86,6 +95,7 @@ module.exports = class AbstractPage {
     if (this.router) this.router.renderPage({ animation: false });
   }
 
+  // paginate: calculates and returns the shown slice of an object-array based on the pagination attributes
   paginate (dbObject) {
     const start = ((this.currentPage - 1) * (this.elementsPerPage));
     const end = (this.currentPage * this.elementsPerPage < dbObject.length) ? (this.currentPage * this.elementsPerPage) : (dbObject.length);
@@ -95,27 +105,15 @@ module.exports = class AbstractPage {
     return displayedObjects;
   }
 
-  saveForm () {
-    if (this.isValid(this.getFormValues(this.formid))) {
-      this.form = this.getFormValues(this.formid);
-    }
-  }
+  // ----------------------------------------------
 
-  // render: should return pages rendered HTML as String
-  // async to be able to await data from server
+  /*
+   * RENDER FUNCTIONS
+   */
+
+  /* render: should return pages rendered HTML as String
+     async to be able to await data from server */
   async render () { return ''; }
-
-  // registerClickHandler: finds element based on querySelector and adds a callback on click to it
-  registerClickHandler (querySelector, callback) {
-    const elements = document.querySelectorAll(querySelector);
-    for (const element of elements) {
-      if (element) {
-        element.addEventListener('click', function (event) {
-          callback(event);
-        }, true);
-      }
-    }
-  }
 
   // renderHandleBars: compiles handlebar template and injects data into it
   renderHandleBars (templateSource, data) {
@@ -123,18 +121,21 @@ module.exports = class AbstractPage {
     return template(data);
   }
 
+  // ----------------------------------------------
+
+  /*
+   * FORM FUNCTIONS
+   */
+
   // getValue: gets value from element matched by a given querySelector
   getValue (querySelector) {
     return (document.querySelector(querySelector)?.value || null);
   }
 
-  // ----------------------------------------------
-
   /*  getFormValues (querySelector):
       Gets all "input", "textarea", "select", etc. - elements within a form (fetched by the querySelector)
       and returns their values in an object like: { name: element.value }
       where name (the key) is represented by the elements name attribute */
-
   getFormValues (querySelector) {
     const selector = `${querySelector} input, ${querySelector} select, ${querySelector} textarea`;
     const elements = document.querySelectorAll(selector);
@@ -145,32 +146,10 @@ module.exports = class AbstractPage {
     return result;
   }
 
-  /* printContainer: Prints a given container-query-selector */
-
-  printContainer (querySelector, title, width, height) {
-    console.log('PRINT');
-    const reservationConfirmation = document.querySelector(querySelector);
-    const printWindow = window.open('', 'PRINT', `height=${width},width=${height}`);
-    const printHTML = `<html>
-      <head>
-        <title>${title}</title>
-      </head>
-      <body>
-        ${reservationConfirmation.innerHTML}
-      </body>
-    </html>`;
-
-    printWindow.document.write(printHTML);
-    printWindow.document.close(); // necessary for IE >= 10
-    printWindow.focus(); // necessary for IE >= 10*/
-    printWindow.print();
-    printWindow.close();
-
-    return true;
-  }
+  // ----------------------------------------------
 
   /*
-   * Axios Functions
+   * AXIOS FUNCTIONS
    */
 
   /*  async getData (urlpath):
@@ -202,53 +181,86 @@ module.exports = class AbstractPage {
     }
   }
 
-  /* Pagination functions */
+  // ----------------------------------------------
 
   /*
-   * UIKit Functions
+   * UIKIT FUNCTIONS
    */
 
+  // toast: displays UI-Kit Notification with given message and status
   toast (message, status) {
-    UIkit.notification(message, status || 'primary');
+    notification(message, status || 'primary');
   }
 
+  // openModal: opens an existing uk-modal based on a selector
   openModal (selector) {
-    console.log(UIkit.modal);
-    const modal = UIkit.modal(selector);
-    if (modal) modal.show();
+    // console.log(UIkit.modal);
+    const modalElement = modal(selector);
+    if (modalElement) modal.show();
   }
+
+  // ----------------------------------------------
 
   /*
    * HELPER FUNCTIONS
    */
 
-  /* isValid: checks if a value is not undefined or null */
+  // isValid: checks if a value is not undefined or null
   isValid (value) {
     return value !== undefined && value !== null;
   }
 
-  /* isFilled: checks if a value is valid and not empty */
+  // isFilled: checks if a value is valid and not empty
   isFilled (value) {
     return this.isValid(value) && value !== '';
   }
 
-  /* formatDate: formats a datestring into german date time format */
+  // formatDate: formats a datestring into german date time format
   formatDate (dateString) {
     const date = new Date(dateString);
     const options = { year: 'numeric', month: '2-digit', day: 'numeric', hour: '2-digit', minute: '2-digit' };
     return date.toLocaleDateString('de-DE', options);
   }
 
-  /* clone: clones JSON compatible structures */
-  clone (value) {
-    if (value.length === undefined && typeof value === 'object') return Object.create(value);
-    if (value.length !== undefined && typeof value[0] === 'object') {
-      const returnArr = [];
-      for (const val of value) {
-        returnArr.push(Object.create(val));
+  // registerClickHandler: finds element based on querySelector and adds a callback on click to it
+  registerClickHandler (querySelector, callback) {
+    const elements = document.querySelectorAll(querySelector);
+    for (const element of elements) {
+      if (element) {
+        element.addEventListener('click', function (event) {
+          callback(event);
+        }, true);
       }
-      return returnArr;
     }
-    return JSON.parse(JSON.stringify(value));
+  }
+
+  // saveForm: saves form to get re-inserted into template when re-rendering
+  saveForm () {
+    if (this.isValid(this.getFormValues(this.formid))) {
+      this.form = this.getFormValues(this.formid);
+    }
+  }
+
+  // printContainer: Prints a given container-query-selector
+  printContainer (querySelector, title, width, height) {
+    console.log('PRINT');
+    const reservationConfirmation = document.querySelector(querySelector);
+    const printWindow = window.open('', 'PRINT', `height=${width},width=${height}`);
+    const printHTML = `<html>
+        <head>
+          <title>${title}</title>
+        </head>
+        <body>
+          ${reservationConfirmation.innerHTML}
+        </body>
+      </html>`;
+
+    printWindow.document.write(printHTML);
+    printWindow.document.close(); // necessary for IE >= 10
+    printWindow.focus(); // necessary for IE >= 10*/
+    printWindow.print();
+    printWindow.close();
+
+    return true;
   }
 };
