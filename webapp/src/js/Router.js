@@ -6,7 +6,7 @@ const TicketPage = require('./pages/Ticket');
 
 /*  Router: Handles Routes and Pages  */
 module.exports = class Router {
-  constructor () {
+  constructor() {
     // Pages-Array assigns URL-path to Page-Class
     this.pages = [
       { path: '/', pageClass: HomePage },
@@ -18,15 +18,6 @@ module.exports = class Router {
     // Array for registered Listeners [needed to remove them at some point]
     this.registeredListeners = [];
 
-    // Navigate to requested page if redirect-URL is present
-    if (window.location.search && window.location.search !== '') {
-      const redirectPath = decodeURIComponent(window.location.search.replace(/[?=]/g, '').replace('redirect', ''));
-      if (redirectPath[0] === '/') this.navigateTo(redirectPath);
-      console.log(redirectPath, redirectPath[0]);
-    } else {
-      this.createPage();
-    }
-
     // RouterLinkListener Function
     this.routerLinkListener = (event) => {
       if (!event.target.matches('[data-routerLink]')) return;
@@ -36,12 +27,23 @@ module.exports = class Router {
       // instead navigate with own routing function
       this.navigateTo(event.target.href);
     };
+
+    // Navigate to requested page if redirect-URL is present
+    if (window.location.search && window.location.search !== '') {
+      const redirectPath = decodeURIComponent(window.location.search.replace(/[?=]/g, '').replace('redirect', ''));
+      if (redirectPath[0] === '/') this.navigateTo(redirectPath);
+      console.log(redirectPath, redirectPath[0]);
+    } else {
+      this.createPage();
+    }
+
+
   }
 
   /* createPage: creates the instance of a page registered with its class in the pages array
      also handles the routerlinkclickhandler after page rendering as well as error page creation
   */
-  async createPage () {
+  async createPage() {
     this.routerpage = this.findPage(window.location.pathname);
     if (this.routerpage !== null && this.routerpage !== undefined) {
       // creating object of page class
@@ -60,13 +62,13 @@ module.exports = class Router {
   }
 
   /* addRouterLinkClickHandler: 1st removes clickHandler (if exists) then re-adds it */
-  addRouterLinkClickHandler () {
+  addRouterLinkClickHandler() {
     document.removeEventListener('click', this.routerLinkListener);
     document.addEventListener('click', this.routerLinkListener, false);
   }
 
   /* findPage: finds page from router Pages array that matches the current location pathname */
-  findPage (urlpath) {
+  findPage(urlpath) {
     if (this.pages?.length > 0) {
       for (const page of this.pages) {
         const routeRegex = new RegExp('^' + page.path.replace(/\//g, '\\/') + '$');
@@ -79,7 +81,7 @@ module.exports = class Router {
   /* renderPage: Creates a Page Class according to the pageClass property of the RouterPage
      Renders HTML content of class and registers clickHandlers of the class if given
      removes/adds ui-kits active class to the menu-entry linking to the current page */
-  async renderPage (options = null) {
+  async renderPage(options = null) {
     console.log('renderPage', this.page);
     // setting 'uk-active' class if current path is linked in the menu-item
     const mode = window.localStorage.getItem('mode');
@@ -142,7 +144,7 @@ module.exports = class Router {
 
   /* navigateTo: "soft navigate" to url
         call createPage function to render content based on the new url */
-  navigateTo (url) {
+  navigateTo(url) {
     if (url !== window.location.href) {
       this.changeURL(url);
       this.createPage();
@@ -150,7 +152,7 @@ module.exports = class Router {
   }
 
   /* changeURL: change window url without navigating to it */
-  changeURL (url) {
+  changeURL(url) {
     console.log('changes history to:', url);
     window.history.pushState(null, null, url);
   }
@@ -158,7 +160,7 @@ module.exports = class Router {
 
 // debounce: debounces function with a timer to ensure
 // resize function is only called every x-time and not EVERYTIME
-function debounce (time, func) {
+function debounce(time, func) {
   let timer;
   return function (event) {
     if (timer) clearTimeout(timer);
