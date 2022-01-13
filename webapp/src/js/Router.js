@@ -13,7 +13,7 @@ module.exports = class Router {
       { path: '/page/cinemas', viewClass: CinemasPage },
       { path: '/page/presentations', viewClass: PresentationsPage }
     ];
-
+    this.registeredListeners = [];
     this.createPage();
   }
 
@@ -73,12 +73,25 @@ module.exports = class Router {
         }
       }
 
-      // registering pages clickHandlers - if given via clickHandler attribute
+      // Remove all old registered Listeners
+      if (this.registeredListeners.length > 0) {
+        for (const eventListener of this.registeredListeners) {
+          eventListener.element.removeEventListener(eventListener.event, eventListener.listener);
+        }
+        this.registeredListeners = [];
+      }
+
+      // Registering pages clickHandlers - if given via clickHandler attribute
       const eventListeners = this.page.eventListener;
       if (eventListeners?.length > 0) {
         for (const eventListener of eventListeners) {
-          eventListener.element.addEventListener(eventListener.event, debounce(200, (event) => { eventListener.callback(); }));
-          // this.page.registerClickHandler(clickHandler.querySelector, clickHandler.callback);
+          const listener = debounce(100, (event) => { eventListener.callback(); });
+          eventListener.element.addEventListener(eventListener.event, listener);
+          this.registeredListeners.push({
+            element: eventListener.element,
+            event: eventListener.event,
+            listener: listener
+          });
         }
       }
 
