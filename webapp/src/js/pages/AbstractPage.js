@@ -199,7 +199,7 @@ module.exports = class AbstractPage {
   openModal (selector) {
     // console.log(UIkit.modal);
     const modalElement = modal(selector);
-    if (modalElement) modal.show();
+    if (modalElement) modalElement.show();
   }
 
   // ----------------------------------------------

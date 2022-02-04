@@ -101,9 +101,9 @@ module.exports = class PresentationsPage extends AbstractPage {
       <div class="uk-container" id="cinemas-div-cinemaList">
         <h2> Vorführungen </h2>
 
-        <div class="uk-child-width-expand@s uk-text-center uk-grid-match" uk-grid>
+        <div class="pagination-grid uk-child-width-expand@s uk-text-center uk-grid-match" uk-grid style="min-height:{{ gridHeight }}">
             {{#each presentations}}
-            <div class="uk-width-1-3@m">
+            <div class="uk-width-1-3@m" style="height: {{ ../cardHeight }}">
                 <div class="uk-card uk-card-default uk-card-body">
                     <h4>{{this.movieTitle}}</h4>
                     <ul class="uk-list">
@@ -134,11 +134,16 @@ module.exports = class PresentationsPage extends AbstractPage {
       </ul>
     </div>`;
 
+    const rows = (this.elementsPerPage / this.elementsPerRow);
+    const minHeight = parseInt(rows * this.cardHeight + (rows - 1) * 40) + 'px';
+
     const data = {
       presentations: displayedPresentations,
       cinemas: this.cinemas,
       pages: this.pages,
-      currentPage: this.currentPage
+      currentPage: this.currentPage,
+      gridHeight: minHeight,
+      cardHeight: this.cardHeight + 'px'
     };
 
     return this.renderHandleBars(template, data);
