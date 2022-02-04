@@ -39,8 +39,6 @@ module.exports = class AbstractPage {
    * Pagination functions
    */
 
-  // TODO: add grid-height to uk-grid so that pagination stays fixed if the page is not filled completely
-
   addPaginationHandler () {
     if (!this.isValid(this.clickHandler)) this.clickHandler = [];
     this.clickHandler.push({
