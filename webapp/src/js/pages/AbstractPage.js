@@ -86,7 +86,7 @@ module.exports = class AbstractPage {
   }
 
   // calculateElementsPerPage: calculates the amount of elements shown on one page
-  calculateElementsPerPage () {
+  async calculateElementsPerPage () {
     // TODO: catch responsive design and calculate elements accordingly
     const oldval = this.elementsPerPage;
     const height = window.innerHeight;
@@ -95,7 +95,7 @@ module.exports = class AbstractPage {
     this.elementsPerPage = newAmount >= this.minElements ? newAmount : this.minElements;
     if (this.elementsPerPage !== oldval) this.currentPage = 1;
     this.saveForm();
-    if (this.router) this.router.renderPage({ animation: false });
+    if (this.router) await this.router.renderPage({ animation: false });
   }
 
   // paginate: calculates and returns the shown slice of an object-array based on the pagination attributes

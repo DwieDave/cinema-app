@@ -125,9 +125,9 @@ module.exports = class TicketPage extends AbstractPage {
             <h4 class="uk-margin-remove-top"> 1. Vorführung auswählen </h4>
 
             <!-- Vorführungs GRID -->
-            <div class="uk-child-width-expand@s uk-text-center uk-grid-match" uk-grid>
+            <div class="pagination-grid uk-child-width-expand@s uk-text-center uk-grid-match" uk-grid style="min-height:{{ gridHeight }}">
                 {{#each presentations}}
-                <div class="uk-width-1-3@m">
+                <div class="uk-width-1-3@m" style="height: {{ ../cardHeight }}">
                     <div data-presentationid="{{this._id}}"
                         class="uk-card uk-card-default uk-card-body presentationCard{{#if (eq this._id ../activePresentation)}} uk-card-primary{{/if}}">
                         <h4>{{this.movieTitle}}</h4>
@@ -211,13 +211,18 @@ module.exports = class TicketPage extends AbstractPage {
         </div>
       </div>`;
 
+    const rows = (this.elementsPerPage / this.elementsPerRow);
+    const minHeight = parseInt(rows * this.cardHeight + (rows - 1) * 40) + 'px';
+
     const data = {
       presentations: displayedPresentations,
       activePresentation: this.activePresentation,
       form: this.form,
       response: this.response,
       currentPage: this.currentPage,
-      pages: this.pages
+      pages: this.pages,
+      gridHeight: minHeight,
+      cardHeight: this.cardHeight + 'px'
     };
     return this.renderHandleBars(template, data);
   }
