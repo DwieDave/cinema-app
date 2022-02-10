@@ -85,8 +85,6 @@ module.exports = class AbstractPage {
 
   // calculateElementsPerPage: calculates the amount of elements shown on one page
   async calculateElementsPerPage () {
-    // TODO: catch responsive design and calculate elements accordingly
-
     const oldval = this.elementsPerPage;
     const height = window.innerHeight;
     const heightForGrid = height - this.offset;

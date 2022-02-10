@@ -9,8 +9,6 @@ module.exports = class HomePage extends AbstractPage {
   async render () {
     document.title = 'Cinema-App: Home';
 
-    // TODO: Template for a better looking Home page
-
     const template =
       `<header class="uk-container uk-padding-remove uk-container-expand">
           <div id="headerImage" {{#if (eq greeting "Betreiber")}}style="background-image: url('/img/kalle-saarinen-o3kWCB9hSBA-unsplash.jpg')"{{/if}}></div>
