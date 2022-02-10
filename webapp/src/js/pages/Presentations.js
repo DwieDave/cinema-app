@@ -11,7 +11,7 @@ module.exports = class PresentationsPage extends AbstractPage {
 
     // Pagination
     this.cardHeight = 240;
-    this.offset = 470;
+    this.offset = 510;
 
     // Register clickhandler
     this.clickHandler = [{

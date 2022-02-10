@@ -86,11 +86,21 @@ module.exports = class AbstractPage {
   // calculateElementsPerPage: calculates the amount of elements shown on one page
   async calculateElementsPerPage () {
     // TODO: catch responsive design and calculate elements accordingly
+
     const oldval = this.elementsPerPage;
     const height = window.innerHeight;
     const heightForGrid = height - this.offset;
-    const newAmount = Math.floor(heightForGrid / this.cardHeight) * this.elementsPerRow;
-    this.elementsPerPage = newAmount >= this.minElements ? newAmount : this.minElements;
+
+    if (window.innerWidth <= 959) {
+      this.elementsPerPage = this.elementsPerPage / this.elementsPerRow;
+      this.elementsPerRow = 1;
+    } else {
+      this.elementsPerRow = 3;
+      const newAmount = Math.floor(heightForGrid / this.cardHeight) * this.elementsPerRow;
+      this.elementsPerPage = newAmount >= this.minElements ? newAmount : this.minElements;
+    }
+
+    console.log(window.innerWidth, this.elementsPerPage, this.elementsPerRow);
     if (this.elementsPerPage !== oldval) this.currentPage = 1;
     this.saveForm();
     if (this.router) await this.router.renderPage({ animation: false });

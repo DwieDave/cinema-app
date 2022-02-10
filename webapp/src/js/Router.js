@@ -127,6 +127,19 @@ module.exports = class Router {
         }
       }
 
+      // Register window resize listener for Navigation icons
+      window.addEventListener('resize', debounce(100, () => {
+        const customer = document.querySelector('.modeSelection.customer');
+        const owner = document.querySelector('.modeSelection.owner');
+        if (window.innerWidth <= 822) {
+          customer.innerHTML = '<img src="/img/people-outline.svg" style="pointer-events: none;" width="32px"/>';
+          owner.innerHTML = '<img src="/img/videocam-outline.svg" style="pointer-events: none;" width="32px"/>';
+        } else {
+          customer.innerHTML = 'Kunde';
+          owner.innerHTML = 'Betreiber';
+        }
+      }));
+
       // Workaround to re-trigger uikit animation on pageRender
       if (options?.animation !== false) {
         appContainer.style.animation = 'none';

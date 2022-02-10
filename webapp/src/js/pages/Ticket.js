@@ -162,14 +162,14 @@ module.exports = class TicketPage extends AbstractPage {
             <h4> 2. Daten eingeben und reservieren </h4>
             <form class="uk-form-stacked" id="newTicketForm">
                 <div class="uk-grid-match uk-margin" uk-grid>
-                    <div class="uk-width-expand@m">
+                    <div class="uk-width-expand@s">
                         <label class="uk-form-label" for="form-stacked-text">Ihr Name *</label>
                         <div class="uk-form-controls">
                             <input class="uk-input" id="form-stacked-text" type="text" name="customerName"
                                 placeholder="Ihr Name *" {{#if form.customerName}}value="{{form.customerName}}" {{/if}}>
                         </div>
                     </div>
-                    <div class="uk-width-expand@m">
+                    <div class="uk-width-expand@s">
                         <label class="uk-form-label" for="form-stacked-text">Anzahl Sitzplätze *</label>
                         <div class="uk-form-controls">
                             <input class="uk-input" id="form-stacked-text" type="number" name="reservedSeats"
@@ -177,7 +177,7 @@ module.exports = class TicketPage extends AbstractPage {
                                 {{/if}}>
                         </div>
                     </div>
-                    <div class="uk-width-auto@m uk-margin-auto-top" style="max-height: 40px;">
+                    <div class="uk-width-auto@s uk-margin-auto-top" style="max-height: 40px;">
                         <button id="sendTicket" class="uk-button uk-button-primary">Tickets reservieren</button>
                     </div>
                 </div>
